@@ -1,16 +1,28 @@
 const uuid = require("uuid");
 const path = require("path");
-const { Product } = require("../models/models.js");
+const { Product, ProductInfo } = require("../models/models.js");
 const ApiError = require("../error/ApiError.js");
 const { where } = require("sequelize");
+const fs = require("fs")
 
 class ProductController {
   async create(req, res, next) {
     try {
-      const { name, price, brandId, categoryId, info } = req.body;
+      let { name, price, brandId, categoryId, info } = req.body;
       const { img } = req.files;
       let fileName = uuid.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", fileName));
+
+      if (info) {
+        info = JSON.parse(info);
+        info.forEach((i) =>
+          ProductInfo.create({
+            title: i.title,
+            description: i.description,
+            productId: product.id,
+          })
+        );
+      }
 
       const product = await Product.create({
         name,
@@ -59,7 +71,28 @@ class ProductController {
     return res.json(products);
   }
 
-  async getOne(req, res) {}
+  async getOne(req, res) {
+    const { id } = req.params;
+    const product = await Product.findOne({
+      where: { id },
+      include: [{ model: ProductInfo, as: "info" }],
+    });
+    return res.json(product)
+  }
+
+  async delete(req, res, next) {
+    try {
+    const { id } = req.params;
+    const product = await Product.findOne({where: id});
+
+    if (!product) {
+      return res.status(404).json({message: "Product not found"});
+    }
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
+ 
 }
 
 module.exports = new ProductController();
