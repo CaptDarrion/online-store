@@ -83,11 +83,24 @@ class ProductController {
   async delete(req, res, next) {
     try {
     const { id } = req.params;
-    const product = await Product.findOne({where: id});
+    const product = await Product.findOne({where: {id} });
 
     if (!product) {
       return res.status(404).json({message: "Product not found"});
     }
+
+    await ProductInfo.destroy({where: { productId: id}})
+    await product.destroy();
+
+    const filePath = path.resolve(__dirname, "..", "static", product.img);
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        next(ApiError.badRequest("Error while deleting the image"));
+      }
+    });
+
+    return res.status(200).json({ message: "Removal completed" });
+
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }

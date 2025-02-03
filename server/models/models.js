@@ -58,7 +58,7 @@ Rating.belongsTo(User);
 Product.hasMany(Rating);
 Rating.belongsTo(Product);
 
-Product.hasMany(ProductInfo, {as: 'info'});
+Product.hasMany(ProductInfo, { as: 'info' });
 ProductInfo.belongsTo(Product);
 
 Product.hasOne(BasketProduct);
@@ -67,10 +67,10 @@ BasketProduct.belongsTo(Product);
 Basket.hasMany(BasketProduct);
 BasketProduct.belongsTo(Basket);
 
-Category.hasMany(Product);
+Category.hasMany(Product, { onDelete: 'CASCADE'} );
 Product.belongsTo(Category);
 
-Brand.hasMany(Product);
+Brand.hasMany(Product, { onDelete: 'CASCADE'} );
 Product.belongsTo(Brand);
 
 Brand.belongsToMany(Category, { through: BrandCategory });
