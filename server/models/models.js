@@ -6,6 +6,13 @@ const User = sequelize.define("user", {
   email: { type: DataTypes.STRING, unique: true },
   password: { type: DataTypes.STRING },
   role: { type: DataTypes.STRING, defaultValue: "USER" },
+  isActivated: { type: DataTypes.BOOLEAN, defaultValue: false },
+  activationLink: { type: DataTypes.STRING, allowNull: true },
+});
+
+const Token = sequelize.define("token", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  refreshToken: { type: DataTypes.STRING, allowNull: true},
 });
 
 const Basket = sequelize.define("basket", {
@@ -49,11 +56,15 @@ const BrandCategory = sequelize.define("brand_category", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
+
 User.hasOne(Basket);
 Basket.belongsTo(User);
 
 User.hasMany(Rating);
 Rating.belongsTo(User);
+
+User.hasOne(Token, { onDelete: "CASCADE"});
+Token.belongsTo(User);
 
 Product.hasMany(Rating);
 Rating.belongsTo(Product);
@@ -86,4 +97,5 @@ module.exports = {
   Category,
   Brand,
   BrandCategory,
+  Token,
 };
