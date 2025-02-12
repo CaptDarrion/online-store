@@ -14,7 +14,7 @@ class ApiError extends Error {
   }
 
   static forbiden(message, errors = []) {
-    return new ApiError(403, message, errors);
+    return new ApiError(403, 'Немає доступу');
   }
 
   static unathorizedError() {

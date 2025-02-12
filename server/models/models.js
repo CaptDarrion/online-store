@@ -57,7 +57,7 @@ const BrandCategory = sequelize.define("brand_category", {
 });
 
 
-User.hasOne(Basket);
+User.hasOne(Basket, { onDelete: "CASCADE"});
 Basket.belongsTo(User);
 
 User.hasMany(Rating);
