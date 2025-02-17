@@ -9,8 +9,7 @@ import { observer } from "mobx-react";
 
 const AppRouter = observer(() => {
     const { user } = useContext(Context);
-    console.log(user);
-    
+
     return (
  
         <Routes>

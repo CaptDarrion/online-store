@@ -9,7 +9,8 @@ import logo  from '../assets/icons/logo.svg'
 const NavBar = observer(() => {
   const { user } = useContext(Context);
   const navigate = useNavigate();
-
+  console.log(user);
+  
 
   return (
            <nav className="sticky top-0 left-0 w-full bg-gray-50 border-b border-gray-200 z-50">
@@ -69,7 +70,9 @@ const NavBar = observer(() => {
                     {user.isAuth ? (
                         <>
                           <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" onClick={() => user.logout()}>Выйти</button>
+                          {user.role ==='ADMIN' && (
                           <button className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-800 transition" onClick={() => navigate(ADMIN_ROUTE)}>Админ панель</button>
+                          )}
                           <button  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" onClick={() => navigate(BASKET_ROUTE)}>Корзина</button>
                             
                         </>

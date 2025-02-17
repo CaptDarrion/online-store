@@ -9,11 +9,14 @@ import { Context } from './main';
 const App = observer(() => {
   const { user } = useContext(Context)
 
-  useEffect(() =>  {
-    if(localStorage.getItem('token')) {
-      user.checkAuth();
-    }
-  }, [user])
+  useEffect(() => {
+    const checkAuthAsync = async () => {
+      if (localStorage.getItem('token')) {
+        await user.checkAuth();  
+      }
+    };
+    checkAuthAsync();
+  }, [user]); 
 
   return (
     <BrowserRouter>

@@ -19,6 +19,10 @@ export default class UserStore {
         this.user = user;
     }
 
+    get role() {
+        return this.user?.role;
+    }
+
     async login(email, password) {
         try {
             const response = await AuthService.login(email, password);
@@ -64,8 +68,6 @@ export default class UserStore {
             this.setUser(response.data.user);
         } catch (e) {
             console.log(e.response?.data?.message);
-        } finally {
-            this.setLoading(false);
         }
     }
 
