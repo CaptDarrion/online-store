@@ -1,6 +1,4 @@
 const ApiError = require("../error/ApiError")
-const bcrypt = require('bcrypt');
-const { User, Basket} = require('../models/models.js');
 const userService = require("../service/userService.js");
 const { validationResult } = require("express-validator");
 
@@ -67,15 +65,6 @@ class UserController {
     }
   }
 
-  async getUsers(req, res, next) {
-    try {
-      const users = await userService.getAllUsers();
-      return res.json(users)
-
-    } catch (e) {
-      next(e);
-    }
-  }
 }
 
 module.exports = new UserController();
