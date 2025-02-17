@@ -1,4 +1,4 @@
-import $api from '../http/index.js';
+import $api from '../http/index.jsx';
 
 export default class UserService {
     static fetchUsers() {
