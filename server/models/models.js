@@ -45,6 +45,7 @@ const ProductInfo = sequelize.define("product_info", {
 const Category = sequelize.define("category", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
+  parentId: { type: DataTypes.INTEGER, allowNull: true},
 });
 
 const Brand = sequelize.define("brand", {
@@ -80,6 +81,9 @@ BasketProduct.belongsTo(Basket);
 
 Category.hasMany(Product, { onDelete: 'CASCADE'} );
 Product.belongsTo(Category);
+
+Category.hasMany(Category, { as: "subcategories", foreignKey: "parentId", onDelete: 'CASCADE' });
+Category.belongsTo(Category, { as: "parent", foreignKey: "parentId" });
 
 Brand.hasMany(Product, { onDelete: 'CASCADE'} );
 Product.belongsTo(Brand);

@@ -28,8 +28,8 @@ const Auth = observer(() => {
 
 
     return (
-      <div className="flex items-start justify-center min-h-[calc(100vh-165px)] bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md w-[520px] h-[371px] mt-[230px]">
+      <div className="flex items-start justify-center min-h-[calc(100vh-165px)] ">
+        <div className="bg-white p-8 rounded-lg shadow-md w-[520px] h-[371px] mt-[230px] border border-green-200">
           <h2 className="text-center text-2xl font-bold text-gray-800 mb-6">{isLogin ? 'Авторизация' : 'Регистрация'}</h2>
           
           <input

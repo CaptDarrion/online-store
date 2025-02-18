@@ -3,14 +3,31 @@ const ApiError = require("../error/ApiError.js");
 const ProductController = require("../controllers/productController.js")
 
 class CategoryController {
-  async create(req, res) {
-    const { name } = req.body;
-    const category = await Category.create({ name });
+  async create(req, res, next) {
+    try {
+      const { name, parentId } = req.body;
+
+      if (parentId) {
+        const parentCategory = await Category.findByPk(parentId);
+        if (!parentCategory) {
+          return res.status(400).json({ message: "Parent category not found" });
+        }
+      }
+
+      
+    const category = await Category.create({ name, parentId: parentId || null });
     return res.json(category);
+    } catch (e) {
+      next(ApiError.badRequest(e.message))
+    }
+    
   }
 
   async getAll(req, res) {
-    const categories = await Category.findAll();
+    const categories = await Category.findAll({
+      where: { parentId: null }, 
+      include: [{ model: Category, as: "subcategories" }] 
+    });
     return res.json(categories);
   }
 
