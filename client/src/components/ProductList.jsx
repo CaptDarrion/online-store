@@ -15,7 +15,7 @@ const ProductList = observer(() => {
         >
           {/* Изображение товара */}
           <img
-            src={`path/to/your/images/${productItem.img}`} // Замените на правильный путь
+            src={`http://localhost:5000/${productItem.img}`} // Замените на правильный путь
             alt={productItem.name}
             className="w-full h-48 object-contain rounded-md mb-2" // Настроены размеры изображения
           />

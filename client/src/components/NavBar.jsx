@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { observer } from 'mobx-react';
 import { Context } from '../main';
-import { ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
+import { ABOUT_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, BLOG_ROUTE, CONTACTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/icons/logo.svg';
 import { ShoppingCart } from 'lucide-react';
@@ -9,7 +9,6 @@ import { ShoppingCart } from 'lucide-react';
 const NavBar = observer(() => {
   const { user } = useContext(Context);
   const navigate = useNavigate();
-  console.log(user);
 
   return (
     <nav className="sticky top-0 left-0 w-full bg-gray-50 border-b border-gray-200 z-50">
@@ -51,13 +50,12 @@ const NavBar = observer(() => {
       {/* Нижняя часть с кнопками, фон темно-серый */}
       <div className="bg-neutral-900 p-4 flex flex-col md:flex-row justify-between items-center">
         <ul className="flex justify-center md:justify-start space-x-6 md:ml-64 mb-4 md:mb-0">
-          <li><a href="/" className="text-gray-300 hover:text-white">Головна</a></li>
-          <li><a href="/shop" className="text-gray-300 hover:text-white">Продукція</a></li>
-          <li><a href="/blog" className="text-gray-300 hover:text-white">Блог</a></li>
-          <li><a href="#" className="text-gray-300 hover:text-white">Бренди</a></li>
-          <li><a href="/about" className="text-gray-300 hover:text-white">Про нас</a></li>
-          <li><a href="/contact" className="text-gray-300 hover:text-white">Контакти</a></li>
-         
+          <li className="text-gray-300 hover:text-white" onClick={() => navigate(HOME_ROUTE)}> Головна</li>
+          <li className="text-gray-300 hover:text-white" onClick={() => navigate(SHOP_ROUTE)}> Продукція</li>
+          <li className="text-gray-300 hover:text-white" onClick={() => navigate(BLOG_ROUTE)}> Блог</li>
+          <li className="text-gray-300 hover:text-white" onClick={() => navigate(SHOP_ROUTE)}> Бренди</li>
+          <li className="text-gray-300 hover:text-white" onClick={() => navigate(ABOUT_ROUTE)}> Про нас</li>
+          <li className="text-gray-300 hover:text-white" onClick={() => navigate(CONTACTS_ROUTE)}> Контакти</li>
         </ul>
 
         {/* Кнопки админ панели и авторизации */}

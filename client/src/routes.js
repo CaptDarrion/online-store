@@ -1,9 +1,14 @@
 import Admin from "./pages/Admin"
-import { ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE, PRODUCT_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "./utils/consts"
+import { ABOUT_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, BLOG_ROUTE, CONTACTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, PRODUCT_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "./utils/consts"
 import Basket from "./pages/Basket"
 import Shop from "./pages/Shop"
 import Auth from "./pages/Auth"
 import ProductPage from "./pages/ProductPage"
+import About from "./pages/About"
+import Contacts from "./pages/Contacts"
+import Blog from "./pages/Blog"
+import { Home } from "lucide-react"
+
 
 export const authRoutes = [
     {
@@ -32,5 +37,22 @@ export const publicRoutes = [
     {
         path: PRODUCT_ROUTE + '/:id',
         Component: ProductPage
+    },
+    {
+        path: ABOUT_ROUTE,
+        Component: About
+    },
+    { 
+        path: CONTACTS_ROUTE,
+        Component: Contacts
+    },
+    {
+        path: BLOG_ROUTE,
+        Component: Blog
+    },
+    {
+        path: HOME_ROUTE,
+        Component: Home
     }
+    
 ]

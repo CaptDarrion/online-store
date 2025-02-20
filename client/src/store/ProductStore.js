@@ -2,14 +2,7 @@ import { makeAutoObservable } from 'mobx';
 
 export default class ProductStore {
   constructor() {
-    this.categories = [
-      { id: 1, name: 'Товары для дома', parentId: null },
-      { id: 2, name: 'Поршни', parentId: 1 },
-      { id: 3, name: 'Насосы', parentId: 1 },
-      { id: 4, name: 'Освещение', parentId: null },
-      { id: 5, name: 'Настольные лампы', parentId: 4 },
-      { id: 6, name: 'Настенные лампы', parentId: 4 },
-    ];
+    this.categories = [];
     this.brands = [
       { id: 1, name: 'Intertool' },
       { id: 2, name: 'Wega' },
@@ -33,10 +26,7 @@ export default class ProductStore {
   }
 
   setProducts(products) {
-    this.products = products;
+    this.products = products.rows || [];
   }
 
-  getCategoriesByParentId(parentId) {
-    return this.categories.filter(category => category.parentId === parentId);
-  }
 }
