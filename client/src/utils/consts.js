@@ -8,3 +8,7 @@ export const ABOUT_ROUTE = '/about'
 export const BLOG_ROUTE = '/blog'
 export const CONTACTS_ROUTE ='/contacts'
 export const HOME_ROUTE = '/home'
+export const ADMIN_USERS_ROUTE = '/admin/users'
+export const ADMIN_PRODUCTS_ROUTE = '/admin/product'
+export const ADMIN_CATEGORIES_ROUTE = '/admin/categories'
+export const ADMIN_BRANDS_ROUTE = '/admin/brands';

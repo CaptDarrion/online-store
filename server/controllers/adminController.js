@@ -1,3 +1,4 @@
+const ApiError = require("../error/ApiError");
 const adminService = require("../service/adminService");
 
 class AdminController {
@@ -10,6 +11,16 @@ class AdminController {
           next(e);
         }
       }
+      async deleteUser(req, res, next) {
+        try {
+            const { email } = req.params;
+            const response = await adminService.deleteUser(email);
+            return res.json(response);
+        } catch (e) {
+            next(e);
+        }
+    }
+    
 }
 
 module.exports = new AdminController();

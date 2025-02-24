@@ -22,7 +22,7 @@ const Shop = observer(() => {
     const fetchProducts = async () => {
       try {
         const response = await ProductService.fetchProducts();
-        console.log(response.data)
+        // console.log(response.data)
         product.setProducts(response.data);
       } catch (e) {
         console.log(e)

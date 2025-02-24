@@ -7,7 +7,8 @@ import ProductPage from "./pages/ProductPage"
 import About from "./pages/About"
 import Contacts from "./pages/Contacts"
 import Blog from "./pages/Blog"
-import { Home } from "lucide-react"
+import Home from "./pages/Home"
+
 
 
 export const authRoutes = [
@@ -18,7 +19,8 @@ export const authRoutes = [
     {
         path: BASKET_ROUTE,
         Component: Basket
-    }
+    },
+    
 ]
 
 export const publicRoutes = [
