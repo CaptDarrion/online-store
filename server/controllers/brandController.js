@@ -4,9 +4,18 @@ const ProductController = require("./productController.js")
 
 class BrandController {
   async create(req, res) {
-    const { name } = req.body;
-    const brand = await Brand.create({ name });
-    return res.json(brand);
+    try {
+      const { name } = req.body;
+      const exists = await Brand.findOne({where: { name: name}})
+      if ( exists ) {
+        return res.status(400).json({ message: "Бренд с таким названием уже существует" })
+      }
+      const brand = await Brand.create({ name });
+      return res.json(brand);
+    } catch (e) {
+      next(ApiError.badRequest(e.message))
+    }
+   
   }
 
   async getAll(req, res) {

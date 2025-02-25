@@ -5,7 +5,8 @@ export default class BrandService {
         return $api.get('/brand')
       }
     
-      static async createBrand() {
-        return $api.post('/brand')
+    static async createBrand(name) {
+        return $api.post('/brand/create', { name })
       }
+    
 }

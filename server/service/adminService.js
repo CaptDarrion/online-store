@@ -5,6 +5,11 @@ class AdminService {
         const users = await User.findAll();
         return users;
     }
+    
+    async getAdmins(role) {
+        const users = await User.findAll({ where: {role: role }})
+        return users;
+    } 
 
     async deleteUser(email) {
         const user = await User.findOne({ where: { email } });
@@ -15,6 +20,7 @@ class AdminService {
         await User.destroy({ where: { email } });
         return { message: "Пользователь успешно удален" }; 
     }
+    
 }
 
 module.exports = new AdminService();

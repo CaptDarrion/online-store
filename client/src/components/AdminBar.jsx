@@ -30,6 +30,12 @@ const AdminBar = ({ onSelect }) => {
           </div>
           <div
             className="cursor-pointer text-gray-800 hover:bg-gray-100 p-2 rounded-lg transition border-b border-gray-300"
+            onClick={() => onSelect("categories")}
+          >
+            Управление категориями
+          </div>
+          <div
+            className="cursor-pointer text-gray-800 hover:bg-gray-100 p-2 rounded-lg transition border-b border-gray-300"
             onClick={() => onSelect("brands")}
           >
             Управление брендами

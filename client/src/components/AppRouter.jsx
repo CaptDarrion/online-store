@@ -5,8 +5,6 @@ import { useContext } from "react";
 import { Context } from "../main";
 import { observer } from "mobx-react";
 
-
-
 const AppRouter = observer(() => {
     const { user } = useContext(Context);
 
