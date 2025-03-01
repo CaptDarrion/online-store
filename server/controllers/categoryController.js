@@ -6,6 +6,15 @@ class CategoryController {
   async create(req, res, next) {
     try {
       const { name, parentId } = req.body;
+      const exists = await Category.findOne({ where: { name } });
+
+      if (!name || name.trim() === "") {
+        return res.status(400).json({ message: "Название категории не может быть пустым" });
+      }
+
+      if ( exists ) {
+        return res.status(400).json({ message: "Категория с таким названием уже существует" })
+      }
 
       if (parentId) {
         const parentCategory = await Category.findByPk(parentId);
@@ -40,14 +49,15 @@ class CategoryController {
   
   async delete(req, res, next) {
     try{ 
-      const { id } = req.params;
-      const category = await Category.findOne({where: { id }})
+      const { name } = req.params;
+      
+      const category = await Category.findOne({ where: { name }})
 
       if (!category) {
         return res.status(404).json({message: "Category not found"})
       }
 
-      const products = await Product.findAll({where: { categoryId: id}})
+      const products = await Product.findAll({where: { categoryId: category.id}})
 
       await Promise.all(
         products.map(product => 

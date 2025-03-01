@@ -9,4 +9,7 @@ export default class BrandService {
         return $api.post('/brand/create', { name })
       }
     
+    static async deleteOneBrand(name) {
+      return $api.delete(`/brand/${name}`)
+    }
 }

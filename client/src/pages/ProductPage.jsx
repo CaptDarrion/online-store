@@ -12,8 +12,8 @@ const ProductPage = () => {
         const response = await ProductService.fetchOneProduct(id);
         console.log("Полученные данные товара:", response.data);
         setProduct(response.data);
-      } catch (error) {
-        console.error("Ошибка при загрузке товара:", error);
+      } catch (e) {
+        console.error("Ошибка при загрузке товара:", e);
       }
     };
 

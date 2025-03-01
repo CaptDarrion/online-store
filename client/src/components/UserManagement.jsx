@@ -78,6 +78,8 @@ const UserManagement = () => {
       await AdminService.createUser(email, password, role);
       alert("Пользователь создан!");
       setCreateUserError("");
+      fetchUsersHandler();
+      fetchAdminsHandler();
     } catch (e) {
       const errors = e.response?.data?.errors;
       errors
@@ -242,7 +244,7 @@ const UserManagement = () => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex justify-center items-center">
+        <div className="fixed inset-0 flex justify-center bg-gray-200 items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 border border-red-900">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Подтвердите удаление
