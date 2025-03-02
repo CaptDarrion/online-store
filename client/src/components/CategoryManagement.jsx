@@ -9,6 +9,7 @@ const CategoryManagement = () => {
 
   const [deleteModalData, setDeleteModalData] = useState(null);
   const [categoryDeleteError, setCategoryDeleteError] = useState("");
+  const [deleteCategoryName, setDeleteCategoryName] = useState(""); // Для удаления по имени
 
   const fetchCategoriesHandler = async () => {
     try {
@@ -69,14 +70,31 @@ const CategoryManagement = () => {
         );
       }
       alert(`${type === "category" ? "Категория" : "Подкатегория"} удалена`);
-      setCategoryDeleteError("");
     } catch (e) {
-      setCategoryDeleteError(
+      console.error(
         e.response?.data?.message ||
           `Ошибка при удалении ${type === "category" ? "категории" : "подкатегории"}`
       );
     } finally {
       closeDeleteModal();
+    }
+  };
+  
+
+  const deleteCategoryByNameHandler = async () => {
+    if (!deleteCategoryName) {
+      setCategoryDeleteError("Название категории не может быть пустым");
+      return;
+    }
+
+    try {
+      await CategoryService.deleteCategories(deleteCategoryName);
+      setCategories((prevCategories) => prevCategories.filter((category) => category.name !== deleteCategoryName));
+      alert("Категория удалена");
+      setCategoryDeleteError("");
+      fetchCategoriesHandler();
+    } catch (e) {
+      setCategoryDeleteError(e.response?.data?.message || "Ошибка при удалении категории");
     }
   };
 
@@ -122,53 +140,75 @@ const CategoryManagement = () => {
         </div>
 
         {/* Список категорий */}
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[350px] border border-green-600">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Список категорий</h3>
-          {categories.length > 0 ? (
-            <ul className="space-y-4">
-              {categories.map((category) => (
-                <li key={category.id} className="border-b border-gray-300 pb-2">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-700">{category.name}</span>
-                    <button
-                      onClick={() => openDeleteModalForCategory(category.name)}
-                      className="bg-red-600 text-white p-1 rounded hover:bg-red-800 transition"
+<div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[350px] border border-green-600">
+  <h3 className="text-lg font-semibold text-gray-800 mb-4">Список категорий</h3>
+  <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-200">
+    {categories.length > 0 ? (
+      <ul className="space-y-4">
+        {categories.map((category) => (
+          <li key={category.id} className="border-b border-gray-300 pb-2">
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-700">{category.name}</span>
+              <button
+                onClick={() => openDeleteModalForCategory(category.name)}
+                className="bg-red-600 text-white p-1 rounded hover:bg-red-800 transition"
+              >
+                Удалить
+              </button>
+            </div>
+            {category.subcategories && category.subcategories.length > 0 && (
+              <div className="ml-4 mt-2">
+                <ul className="space-y-2">
+                  {category.subcategories.map((sub) => (
+                    <li
+                      key={sub.id}
+                      className="flex justify-between items-center text-gray-600 text-sm pl-2 border-l-2 border-gray-400"
                     >
-                      Удалить
-                    </button>
-                  </div>
-                  {category.subcategories && category.subcategories.length > 0 && (
-                    <div className="ml-4 mt-2">
-                      <ul className="space-y-2">
-                        {category.subcategories.map((sub) => (
-                          <li
-                            key={sub.id}
-                            className="flex justify-between items-center text-gray-600 text-sm pl-2 border-l-2 border-gray-400"
-                          >
-                            <span>{sub.name}</span>
-                            <button
-                              onClick={() =>
-                                openDeleteModalForSubCategory(category.id, sub.name)
-                              }
-                              className="bg-red-600 text-white p-1 rounded hover:bg-red-800 transition"
-                            >
-                              Удалить
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-center text-gray-600 mt-4">Категории не загружены</p>
-          )}
+                      <span>{sub.name}</span>
+                      <button
+                        onClick={() =>
+                          openDeleteModalForSubCategory(category.id, sub.name)
+                        }
+                        className="bg-red-600 text-white p-1 rounded hover:bg-red-800 transition"
+                      >
+                        Удалить
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p className="text-center text-gray-600 mt-4">Категории не загружены</p>
+    )}
+  </div>
+</div>
+
+
+        {/* Карточка для удаления категории по имени */}
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[350px] border border-red-600">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Удалить категорию по имени</h3>
+          <input
+            type="text"
+            placeholder="Введите имя категории для удаления"
+            value={deleteCategoryName}
+            onChange={(e) => setDeleteCategoryName(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded mb-4"
+          />
+          <button
+            onClick={deleteCategoryByNameHandler}
+            className="w-full bg-red-600 text-white p-2 rounded hover:bg-red-800 transition"
+          >
+            Удалить
+          </button>
           {categoryDeleteError && (
             <div className="mt-4 text-red-600">{categoryDeleteError}</div>
           )}
         </div>
+
       </div>
 
       {/* Модальное окно подтверждения удаления */}

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { observer } from 'mobx-react';
 import { Context } from '../main';
-import { ABOUT_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, BLOG_ROUTE, CONTACTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
+import { ABOUT_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, BLOG_ROUTE, BRAND_ROUTE, CONTACTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/icons/logo.svg';
 import { ShoppingCart } from 'lucide-react';
@@ -30,7 +30,7 @@ const NavBar = observer(() => {
             to={SHOP_ROUTE}
             className="text-xl font-bold text-gray-800 text-green-950"
           >
-            Natures&apos;s Prophet
+            Nature&apos;s Prophet
           </NavLink>
         </div>
 
@@ -53,7 +53,7 @@ const NavBar = observer(() => {
           <li className="text-gray-300 hover:text-white" onClick={() => navigate(HOME_ROUTE)}> Головна</li>
           <li className="text-gray-300 hover:text-white" onClick={() => navigate(SHOP_ROUTE)}> Продукція</li>
           <li className="text-gray-300 hover:text-white" onClick={() => navigate(BLOG_ROUTE)}> Блог</li>
-          <li className="text-gray-300 hover:text-white" onClick={() => navigate(SHOP_ROUTE)}> Бренди</li>
+          <li className="text-gray-300 hover:text-white" onClick={() => navigate(BRAND_ROUTE)}> Бренди</li>
           <li className="text-gray-300 hover:text-white" onClick={() => navigate(ABOUT_ROUTE)}> Про нас</li>
           <li className="text-gray-300 hover:text-white" onClick={() => navigate(CONTACTS_ROUTE)}> Контакти</li>
         </ul>

@@ -11,6 +11,7 @@ class BrandController {
       if (!name || name.trim() === "") {
         return res.status(400).json({ message: "Название бренда не может быть пустым" });
       }
+      
       if ( exists ) {
         return res.status(400).json({ message: "Бренд с таким названием уже существует" })
       }

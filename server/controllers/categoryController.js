@@ -52,9 +52,9 @@ class CategoryController {
       const { name } = req.params;
       
       const category = await Category.findOne({ where: { name }})
-
+      
       if (!category) {
-        return res.status(404).json({message: "Category not found"})
+        return res.status(404).json({message: "Категории с таким названием не существует"})
       }
 
       const products = await Product.findAll({where: { categoryId: category.id}})
