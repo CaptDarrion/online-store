@@ -7,4 +7,8 @@ export default class ProductService {
     static async fetchOneProduct(id) {
       return $api.get('/product/' + id)
     }
+    
+    static async createProduct(product) {
+      return $api.post('/product/', product)
+    }
 }

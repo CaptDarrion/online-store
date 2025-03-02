@@ -15,7 +15,6 @@ const CategoryManagement = () => {
     try {
       const response = await CategoryService.fetchCategories();
       setCategories(response.data);
-      console.log("Категории с сервера:", response.data);
     } catch (e) {
       console.error("Ошибка при загрузке категорий:", e);
     }
