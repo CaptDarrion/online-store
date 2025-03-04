@@ -1,5 +1,5 @@
 import Admin from "./pages/Admin"
-import { ABOUT_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, BLOG_ROUTE, BRAND_ROUTE, CONTACTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, PRODUCT_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "./utils/consts"
+import { ABOUT_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, BLOG_ROUTE, BRAND_ROUTE, CONTACTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, PRODUCT_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, WISHLIST_ROUTE } from "./utils/consts"
 import Basket from "./pages/Basket"
 import Shop from "./pages/Shop"
 import Auth from "./pages/Auth"
@@ -9,6 +9,7 @@ import Contacts from "./pages/Contacts"
 import Blog from "./pages/Blog"
 import Home from "./pages/Home"
 import Brand from "./pages/Brand"
+import Wishlist from "./pages/Wishlist"
 
 
 
@@ -21,6 +22,10 @@ export const authRoutes = [
         path: BASKET_ROUTE,
         Component: Basket
     },
+    {
+        path: WISHLIST_ROUTE,
+        Component: Wishlist
+    }
     
 ]
 

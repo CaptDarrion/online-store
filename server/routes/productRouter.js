@@ -1,6 +1,7 @@
 const Router = require("express");
 const router = new Router();
 const productController = require("../controllers/productController");
+const authMiddleware = require("../middleware/authMiddleware")
 
 router.post("/", productController.create);
 router.get("/", productController.getAll);

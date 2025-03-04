@@ -9,7 +9,9 @@ export const BLOG_ROUTE = '/blog'
 export const CONTACTS_ROUTE ='/contacts'
 export const HOME_ROUTE = '/home'
 export const BRAND_ROUTE = '/brands'
+export const WISHLIST_ROUTE = '/wishlist'
 export const ADMIN_USERS_ROUTE = '/admin/users'
 export const ADMIN_PRODUCTS_ROUTE = '/admin/product'
 export const ADMIN_CATEGORIES_ROUTE = '/admin/categories'
 export const ADMIN_BRANDS_ROUTE = '/admin/brands';
+

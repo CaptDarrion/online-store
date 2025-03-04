@@ -10,6 +10,10 @@ const User = sequelize.define("user", {
   activationLink: { type: DataTypes.STRING, allowNull: true },
 });
 
+const Wishlist = sequelize.define("wishlist", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+})
+
 const Token = sequelize.define("token", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   refreshToken: { type: DataTypes.STRING, allowNull: true},
@@ -67,6 +71,9 @@ Rating.belongsTo(User);
 User.hasOne(Token, { onDelete: "CASCADE"});
 Token.belongsTo(User);
 
+User.belongsToMany(Product, { through: Wishlist});
+Product.belongsToMany(User, { through: Wishlist});
+
 Product.hasMany(Rating);
 Rating.belongsTo(Product);
 
@@ -102,4 +109,5 @@ module.exports = {
   Brand,
   BrandCategory,
   Token,
+  Wishlist
 };

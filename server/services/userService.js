@@ -2,11 +2,10 @@ const { User, Basket } = require("../models/models.js")
 const bcrypt = require('bcrypt' )
 const uuid = require('uuid');
 const mailService = require('./mailService.js')
-const TokenService = require('./tokenService.js');
 const tokenService = require("./tokenService.js");
 const UserDto = require("../dtos/userDto.js");
 const { where } = require("sequelize");
-const ApiError = require("../error/ApiError");
+const ApiError = require("../error/ApiError.js");
 
 
 class UserService {

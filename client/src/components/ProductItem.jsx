@@ -1,11 +1,36 @@
 import { observer } from "mobx-react";
-import { Star, ShoppingCart, Heart } from "lucide-react";
+import { Star, ShoppingCart, Heart, HeartOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_ROUTE } from "../utils/consts";
-
+import WishlistService from "../services/WishlistService";
+import { useEffect, useState } from "react";
 
 const ProductItem = observer(({ product }) => {
   const navigate = useNavigate();
+  const [isInWishlist, setIsInWishlist] = useState(false);
+
+
+  useEffect(() => {
+    // Проверка наличия товара в вишлисте при загрузке
+    WishlistService.fetchWishlist().then(({ data }) => {
+      setIsInWishlist(data.some((item) => item.id === product.id));
+    });
+  }, [product.id]);
+
+  const toggleWishlist = async (e) => {
+    e.stopPropagation();
+    try {
+      if (isInWishlist) {
+        await WishlistService.removeFromWishlist(product.id);
+      } else {
+        await WishlistService.addToWishlist(product.id);
+      }
+      setIsInWishlist(!isInWishlist);
+    } catch (error) {
+      console.error("Ошибка при обновлении вишлиста:", error);
+    }
+  };
+
   return (
     <div className="relative bg-white border border-gray-200 rounded-lg shadow-md p-3 transition hover:shadow-lg hover:border-green-500"
     onClick={() => navigate(PRODUCT_ROUTE + '/' + product.id) }>
@@ -16,10 +41,17 @@ const ProductItem = observer(({ product }) => {
         className="w-full h-48 object-contain rounded-md mb-2"
       />
 
-      {/* Иконки сверху */}
-      <div className="absolute top-2 right-2 flex space-x-1">
-        <button className="bg-white p-2 rounded-full shadow-sm hover:shadow transition">
-          <Heart className="text-gray-500 w-5 h-5 hover:text-red-500" />
+     {/* Иконки сверху */}
+     <div className="absolute top-2 right-2 flex space-x-1">
+        <button 
+          className="bg-white p-2 rounded-full shadow-sm hover:shadow transition"
+          onClick={toggleWishlist}
+        >
+          {isInWishlist ? (
+            <HeartOff className="w-5 h-5 text-red-500 hover:text-gray-500 transition" />
+          ) : (
+            <Heart className="w-5 h-5 text-gray-500 hover:text-red-500 transition" />
+          )}
         </button>
       </div>
 

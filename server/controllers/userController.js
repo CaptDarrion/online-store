@@ -1,5 +1,5 @@
 const ApiError = require("../error/ApiError")
-const userService = require("../service/userService.js");
+const userService = require("../services/userService.js");
 const { validationResult } = require("express-validator");
 
 

@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { Context } from '../main';
-import { ABOUT_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, BLOG_ROUTE, BRAND_ROUTE, CONTACTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, PRODUCT_ROUTE, SHOP_ROUTE } from '../utils/consts';
+import { ABOUT_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, BLOG_ROUTE, BRAND_ROUTE, CONTACTS_ROUTE, HOME_ROUTE, LOGIN_ROUTE, PRODUCT_ROUTE, SHOP_ROUTE, WISHLIST_ROUTE } from '../utils/consts';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js'
 import logo from '../assets/icons/logo.svg';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingBasket, Heart, Search} from 'lucide-react';
 
 const NavBar = observer(() => {
   const { user, product } = useContext(Context);
@@ -77,39 +77,57 @@ const NavBar = observer(() => {
         </div>
 
  {/* Поисковая строка */}
- <div className="relative flex items-center space-x-4 w-full md:w-[40%] mx-auto mt-4 md:mt-0">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-            onFocus={handleFocus}
-            onBlur={() => setTimeout(() => {
-              setSearchResults([]);
-            }, 150)}
-            className="flex-grow min-w-0 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+ <div className="relative flex items-center w-full md:w-[40%] mx-auto mt-4 md:mt-0">
+  {/* Поле ввода */}
+  <input
+    type="text"
+    placeholder="Пошук..."
+    value={searchQuery}
+    onChange={handleSearchInputChange}
+    onFocus={handleFocus}
+    onBlur={() => setTimeout(() => setSearchResults([]), 200)}
+    className="flex-grow px-4 py-2 border border-gray-300 rounded-l-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+  />
+
+  {/* Кнопка поиска */}
+  <button 
+    onClick={handleSearchButtonClick}
+    className="bg-green-600 text-white px-4 py-2 rounded-r-full shadow-md hover:bg-green-800 transition flex items-center justify-center"
+  >
+    <Search />
+  </button>
+
+{/* Выпадающий список с результатами */}
+{searchQuery && searchResults.length > 0 && (
+    <ul className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-y-auto z-50 shadow-md">
+      {searchResults.map(productItem => (
+        <li 
+          key={productItem.id} 
+          className="flex items-center p-2 hover:bg-gray-100 cursor-pointer"
+          onClick={() => {
+            navigate(`${PRODUCT_ROUTE}/${productItem.id}`);
+            setSearchQuery('');
+            setSearchResults([]);
+          }}
+        >
+          {/* Миниатюра изображения */}
+          <img 
+            src={`http://localhost:5000/${productItem.img}`} 
+            alt={productItem.name} 
+            className="w-12 h-12 object-cover rounded-md mr-3"
           />
-          <button onClick={handleSearchButtonClick} className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-800">
-            Search
-          </button>
-          {searchQuery && searchResults.length > 0 && (
-  <ul className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-y-auto z-50">
-    {searchResults.map(productItem => (
-      <li 
-        key={productItem.id} 
-        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-        onClick={() => {
-          navigate(`${PRODUCT_ROUTE}/${productItem.id}`);
-          setSearchQuery('');
-          setSearchResults([]);
-        }}
-      >
-        {productItem.name}
-      </li>
-    ))}
-  </ul>
-)}
-        </div>
+          
+          {/* Информация о товаре */}
+          <div className="flex flex-col">
+            <span className="text-sm font-medium text-gray-800">{productItem.name}</span>
+            <span className="text-sm text-gray-600">{productItem.price} грн</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
       </div>
 
       {/* Нижняя часть с кнопками, фон темно-серый */}
@@ -124,21 +142,51 @@ const NavBar = observer(() => {
         </ul>
 
         {/* Кнопки админ панели и авторизации */}
-        <div className="flex space-x-4 md:mr-10">
-          {user.isAuth ? (
-            <>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" onClick={() => user.logout()}>Вийти</button>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" onClick={() => navigate(BASKET_ROUTE)}>
-                <ShoppingCart className="mr-2" />
-              </button>
-              {user.role === 'ADMIN' && (
-                <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-800 transition" onClick={() => navigate(ADMIN_ROUTE)}>Адмін панель</button>
-              )}
-            </>
-          ) : (
-            <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-800 transition" onClick={() => navigate(LOGIN_ROUTE)}>Авторизація</button>
-          )}
-        </div>
+        <div className="flex flex-wrap gap-2 justify-center md:justify-end md:mr-10">
+  {user.isAuth ? (
+    <>
+      <button 
+        className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition"
+        onClick={() => user.logout()}
+      >
+        Вийти
+      </button>
+      
+      <button 
+        className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition"
+        onClick={() => navigate(BASKET_ROUTE)}
+      >
+        <ShoppingBasket className="w-5 h-5 mr-2" />
+        Корзина
+      </button>
+      
+      <button 
+        className="flex items-center px-4 py-2 bg-pink-600 text-white rounded-lg shadow-md hover:bg-pink-700 transition"
+        onClick={() => navigate(WISHLIST_ROUTE)}
+      >
+        <Heart className="w-5 h-5 mr-2" />
+        Обране
+      </button>
+      
+      {user.role === 'ADMIN' && (
+        <button 
+          className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-800 transition"
+          onClick={() => navigate(ADMIN_ROUTE)}
+        >
+          Адмін панель
+        </button>
+      )}
+    </>
+  ) : (
+    <button 
+      className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-800 transition"
+      onClick={() => navigate(LOGIN_ROUTE)}
+    >
+      Авторизація
+    </button>
+  )}
+</div>
+
       </div>
     </nav>
   );
