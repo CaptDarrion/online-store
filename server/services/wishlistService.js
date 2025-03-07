@@ -22,7 +22,8 @@ class WishlistService {
             const user = await User.findByPk(userId, {
                 include: {
                     model: Product,
-                    through: { attributes: [] } // Исключаем промежуточную таблицу
+                    as: "wishlistProducts",
+                    through: { attributes: [] } 
                 }
             });
     
@@ -30,14 +31,16 @@ class WishlistService {
                 throw new Error("User not found");
             }
     
-            console.log('Fetched wishlist:', user.products);
+            console.log('Fetched wishlist:', user.get('wishlistProducts'));
+
     
-            return user.products;
+            return user.get('wishlistProducts') || [];
         } catch (e) {
             console.error(e);
             throw e;
         }
     }
+    
     
 
 }

@@ -45,7 +45,7 @@ const ProductManagement = observer(() => {
         fetchBrands();
         fetchCategories();
         fetchProducts();
-    }, []);
+    }, [product]);
 
     const addInfo = () => {
         setInfo([...info, { title: '', description: '', id: Date.now() }]);
@@ -78,7 +78,6 @@ const ProductManagement = observer(() => {
         try {
             const response = await ProductService.createProduct(formData);
             console.log("Успех:", response);
-            // Можно добавить сброс формы, если нужно
         } catch (e) {
             console.error("Ошибка при добавлении товара:", e);
         }
@@ -88,7 +87,7 @@ const ProductManagement = observer(() => {
         <div className="min-h-screen p-6">
             <h1 className="text-2xl font-bold text-gray-800 mb-6">Управление товарами</h1>
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[500px] border border-blue-600">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Создать категорию</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Создать товар</h3>
                 <input
                     type="text"
                     placeholder="Название товара"
