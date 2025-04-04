@@ -14,4 +14,4 @@ export default class BasketService {
         return $api.delete('/basket/', { data: {productId}})
     }
 
-}
+} 

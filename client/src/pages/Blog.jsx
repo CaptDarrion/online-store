@@ -18,13 +18,10 @@ const Blog = () => {
             date: "2025-02-25", 
             category: "Декор" 
         },
-        // Добавьте другие блоги по аналогии
     ];
 
-    // Состояние для отслеживания открытых блогов
     const [activeBlogId, setActiveBlogId] = useState(null);
 
-    // Обработчик клика по кнопке "Читать далее"
     const toggleFullText = (id) => {
         setActiveBlogId(activeBlogId === id ? null : id);
     };

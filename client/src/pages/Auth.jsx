@@ -83,11 +83,6 @@ const Auth = observer(() => {
                 </NavLink>
           </div>
         }
-    
-
-
-           
-       
         </div>
       </div>
     );

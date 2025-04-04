@@ -44,7 +44,7 @@ class ProductController {
   async getAll(req, res) {
     let { brandId, categoryId, limit, page } = req.query;
     page = page || 1;
-    limit = limit || 9;
+    limit = limit || 20;
     let offset = page * limit - limit;
     let products;
     if (!brandId && !categoryId) {

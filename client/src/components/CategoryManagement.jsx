@@ -9,7 +9,7 @@ const CategoryManagement = () => {
 
   const [deleteModalData, setDeleteModalData] = useState(null);
   const [categoryDeleteError, setCategoryDeleteError] = useState("");
-  const [deleteCategoryName, setDeleteCategoryName] = useState(""); // Для удаления по имени
+  const [deleteCategoryName, setDeleteCategoryName] = useState(""); 
 
   const fetchCategoriesHandler = async () => {
     try {
