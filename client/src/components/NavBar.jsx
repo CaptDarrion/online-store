@@ -5,7 +5,7 @@ import { ABOUT_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, BLOG_ROUTE, BRAND_ROUTE, CONTAC
 import { NavLink, useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import logo from '../assets/icons/logo.svg';
-import { ShoppingBasket, Heart, Search } from 'lucide-react';
+import { ShoppingBasket, Heart, Search, UserCog, LogIn, LogOut } from 'lucide-react';
 
 const NavBar = observer(() => {
   const { user, product } = useContext(Context);
@@ -179,6 +179,7 @@ const NavBar = observer(() => {
                 className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
                 onClick={() => user.logout()}
               >
+                 <LogOut className="w-5 h-5 mr-2" />
                 Вийти
               </button>
               <button 
@@ -200,17 +201,21 @@ const NavBar = observer(() => {
                   className="flex items-center px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition-colors"
                   onClick={() => navigate(ADMIN_ROUTE)}
                 >
+                  <UserCog className="w-5 h-5 mr-2" />
                   Адмін панель
                 </button>
+                
               )}
             </>
           ) : (
-            <button 
-              className="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition-colors"
-              onClick={() => navigate(LOGIN_ROUTE)}
-            >
-              Авторизація
-            </button>
+<button 
+  className="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition-colors flex items-center"
+  onClick={() => navigate(LOGIN_ROUTE)}
+>
+  <LogIn className="w-5 h-5 mr-2" /> {/* Иконка слева от текста */}
+  Авторизація
+</button>
+
           )}
         </div>
       </div>
