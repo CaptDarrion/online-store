@@ -1,127 +1,196 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductService from "../services/ProductService";
+import WishlistService from "../services/WishlistService";
+import BasketService from "../services/BasketService";
+import {Heart, HeartOff, ShoppingCart } from "lucide-react";
 
 const ProductPage = () => {
   const [product, setProduct] = useState({ info: [] });
   const [activeTab, setActiveTab] = useState("characteristics");
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [isInBasket, setIsInBasket] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await ProductService.fetchOneProduct(id);
-        console.log("Полученные данные товара:", response.data);
         setProduct(response.data);
       } catch (e) {
         console.error("Ошибка при загрузке товара:", e);
       }
     };
 
+    const checkWishlist = async () => {
+      try {
+        const { data } = await WishlistService.fetchWishlist();
+        setIsInWishlist(data.some((item) => item.id === Number(id)));
+      } catch (error) {
+        console.error("Ошибка при проверке вишлиста:", error);
+      }
+    };
+
+    const checkBasket = async () => {
+      try {
+        const { data } = await BasketService.fetchBasket();
+        setIsInBasket(data.some((item) => item.id === Number(id)));
+      } catch (error) {
+        console.error("Ошибка при проверке корзины:", error);
+      }
+    };
+
     fetchProduct();
+    checkWishlist();
+    checkBasket();
   }, [id]);
+
+  const toggleWishlist = async () => {
+    try {
+      if (isInWishlist) {
+        await WishlistService.removeFromWishlist(id);
+      } else {
+        await WishlistService.addToWishlist(id);
+      }
+      setIsInWishlist(!isInWishlist);
+    } catch (error) {
+      console.error("Ошибка при обновлении вишлиста:", error);
+    }
+  };
+
+  const toggleBasket = async () => {
+    try {
+      if (isInBasket) {
+        await BasketService.removeFromBasket(id);
+      } else {
+        await BasketService.addToBasket(id);
+      }
+      setIsInBasket(!isInBasket);
+    } catch (error) {
+      console.error("Ошибка при обновлении корзины:", error);
+    }
+  };
 
   if (!product || !product.name) {
     return (
-      <div className="flex justify-center items-center h-screen text-xl font-semibold">
+      <div className="flex justify-center items-center h-screen text-xl font-semibold text-gray-600">
         Загрузка...
       </div>
     );
   }
 
-  const previewImages = [product.img]; 
-
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 " >
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       {/* Основной контейнер */}
-      <div className="max-w-6xl mx-auto bg-white shadow rounded-lg p-4 sm:p-6 lg:p-8 border border-green-200">
+      <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8">
         {/* Заголовок товара */}
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">
           {product.name}
         </h1>
 
-        {/* Верхняя часть: изображения + блок с ценой и кнопками */}
-        <div className="flex flex-col md:flex-row">
-          {/* Левая колонка: превью изображений */}
-          <div className="md:w-1/6 mb-4 md:mb-0 md:mr-4">
-            {previewImages.map((imgUrl, idx) => (
-              <div key={idx} className="mb-2 flex justify-center">
-                {imgUrl ? (
-                  <img
-                    src={`http://localhost:5000/${imgUrl}`}
-                    alt={`preview-${idx}`}
-                    className="w-16 h-16 object-contain border border-gray-200 rounded p-1"
-                  />
-                ) : (
-                  <div className="w-16 h-16 flex items-center justify-center text-gray-500 border border-gray-200 rounded">
-                    Нет фото
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Центральная колонка: главное изображение */}
-          <div className="md:w-1/2 flex items-center justify-center mb-4 md:mb-0">
+        {/* Верхняя часть: изображение + информация о товаре */}
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Главное изображение */}
+          <div className="md:w-2/3 flex items-center justify-center">
             {product.img ? (
               <img
                 src={`http://localhost:5000/${product.img}`}
                 alt={product.name}
-                className="object-contain h-96 w-full rounded "
+                className="object-contain h-96 w-full rounded-lg shadow-md"
               />
             ) : (
-              <div className="text-gray-500">Изображение не доступно</div>
+              <div className="text-gray-500 text-center h-96 flex items-center justify-center w-full bg-gray-100 rounded-lg">
+                Изображение не доступно
+              </div>
             )}
           </div>
 
-          {/* Правая колонка: цена, кнопки, наличие, доставка */}
-          <div className="md:w-1/3 flex flex-col space-y-4">
-            {/* Цена */}
-            <div className="p-4 border border-blue-200 rounded shadow-sm">
-              <p className="text-2xl font-bold text-gray-800 mb-2">
+          {/* Информация о товаре */}
+          <div className="md:w-1/3 flex flex-col space-y-6">
+            {/* Цена и кнопка */}
+            <div className="p-4 bg-gray-50 rounded-lg shadow-sm">
+              <p className="text-3xl font-bold text-gray-800 mb-3">
                 {product.price} грн
               </p>
-              <p className="text-sm text-green-600 font-semibold mb-2">
+              <p className="text-sm text-green-600 font-semibold mb-4">
                 В наличии
               </p>
-              <div className="flex space-x-2">
-                <button className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-200">
-                  Купить
-                </button>
-  
-              </div>
+                {/* Кнопка добавления в корзину */}
+              <button
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 text-lg font-medium"
+                onClick={toggleBasket}
+              >
+                {isInBasket ? (
+                  <>
+                    <ShoppingCart className="w-5 h-5" />
+                    Видалити з кошика
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="w-5 h-5" />
+                    Додати до кошика
+                  </>
+                )}
+              </button>
+              
+              {/* Кнопка добавления в список желаемого */}
+              <button
+                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 text-lg font-medium mt-3"
+                onClick={toggleWishlist}
+              >
+                {isInWishlist ? (
+                  <>
+                    <HeartOff className="w-5 h-5 text-red-500" />
+                    Видалити зі списку бажаного
+                  </>
+                ) : (
+                  <>
+                    <Heart className="w-5 h-5 text-gray-500 hover:text-red-500" />
+                    Додати до списку бажаного
+                  </>
+                )}
+              </button>
             </div>
 
-            {/* Блок доставки/оплаты (пример) */}
-            <div className="p-4 border border-blue-200 rounded shadow-sm text-sm text-gray-700">
-              <p className="font-semibold mb-2">Доставка</p>
-              <p className="mb-2">Самовывоз по адресу Приморська-12, Одеса, Україна </p>
-              <p className="mb-2">Доставка курьером по Одессе</p>
-              <p className="mb-2">Отправка Новой Почтой</p>
-              <hr className="my-2" />
-              <p className="font-semibold mb-2">Оплата</p>
-              <p className="mb-2">Наличными при получении</p>
-              <p className="mb-2">Картой Visa/MasterCard</p>
+            {/* Доставка */}
+            <div className="p-4 bg-gray-50 rounded-lg shadow-sm text-sm text-gray-700">
+              <p className="font-semibold mb-2 text-gray-800">Доставка</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Самовывоз по адресу Приморська-12, Одеса, Україна</li>
+                <li>Доставка курьером по Одессе</li>
+                <li>Отправка Новой Почтой</li>
+              </ul>
             </div>
 
-            {/* Гарантия  */}
-            <div className="p-4 border border-blue-200 rounded shadow-sm text-sm text-gray-700">
-              <p className="font-semibold mb-2">Гарантия</p>
-              <p>Официальная гарантия от производителя</p>
-              <p> Возврат/ Обмен в течении 30 дней</p>
+            {/* Оплата */}
+            <div className="p-4 bg-gray-50 rounded-lg shadow-sm text-sm text-gray-700">
+              <p className="font-semibold mb-2 text-gray-800">Оплата</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Наличными при получении</li>
+                <li>Картой Visa/MasterCard</li>
+              </ul>
+            </div>
+
+            {/* Гарантия */}
+            <div className="p-4 bg-gray-50 rounded-lg shadow-sm text-sm text-gray-700">
+              <p className="font-semibold mb-2 text-gray-800">Гарантия</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Официальная гарантия от производителя</li>
+                <li>Возврат/обмен в течение 30 дней</li>
+              </ul>
             </div>
           </div>
         </div>
 
-        {/* Блок с табами (Характеристики / Отзывы) */}
-        <div className="mt-8">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-6">
+        {/* Табы: Характеристики и Отзывы */}
+        <div className="mt-10">
+          <div className="border-b border-gray-200 mb-6">
+            <nav className="-mb-px flex space-x-8">
               <button
                 onClick={() => setActiveTab("characteristics")}
-                className={`py-2 px-4 border-b-2 font-medium ${
+                className={`py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
                   activeTab === "characteristics"
-                    ? "border-blue-600 text-blue-600"
+                    ? "border-green-600 text-green-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
               >
@@ -129,9 +198,9 @@ const ProductPage = () => {
               </button>
               <button
                 onClick={() => setActiveTab("reviews")}
-                className={`py-2 px-4 border-b-2 font-medium ${
+                className={`py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
                   activeTab === "reviews"
-                    ? "border-blue-600 text-blue-600"
+                    ? "border-green-600 text-green-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
               >
@@ -140,38 +209,32 @@ const ProductPage = () => {
             </nav>
           </div>
 
+          {/* Содержимое табов */}
           <div className="mt-4">
-            {/* Характеристики */}
             {activeTab === "characteristics" && (
               <div>
                 {product.info && product.info.length > 0 ? (
-                  <table className="min-w-full border text-sm">
-                    <tbody>
-                      {product.info.map((item, index) => (
-                        <tr
-                          key={index}
-                          className="border-b hover:bg-gray-50 transition"
-                        >
-                          <td className="py-2 px-4 font-medium text-gray-700 w-1/3">
-                            {item.title}
-                          </td>
-                          <td className="py-2 px-4 text-gray-600">
-                            {item.description}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <div className="space-y-4">
+                    {product.info.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col sm:flex-row sm:space-x-4"
+                      >
+                        <div className="sm:w-1/3 font-medium text-gray-700">
+                          {item.title}
+                        </div>
+                        <div className="sm:w-2/3 text-gray-600">
+                          {item.description}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 ) : (
-                  <p className="text-gray-600">
-                    Нет характеристик для этого товара
-                  </p>
+                  <p className="text-gray-600">Нет характеристик для этого товара</p>
                 )}
               </div>
             )}
 
-
-            {/* Отзывы */}
             {activeTab === "reviews" && (
               <div>
                 <p className="text-gray-600">Отзывов пока нет</p>

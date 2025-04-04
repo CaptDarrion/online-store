@@ -3,18 +3,24 @@ import { Star, ShoppingCart, Heart, HeartOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_ROUTE } from "../utils/consts";
 import WishlistService from "../services/WishlistService";
+import BasketService from "../services/BasketService";
 import { useEffect, useState } from "react";
 
 const ProductItem = observer(({ product }) => {
   const navigate = useNavigate();
   const [isInWishlist, setIsInWishlist] = useState(false);
-
+  const [isInBasket, setIsInBasket] = useState(false);
 
   useEffect(() => {
-    // Проверка наличия товара в вишлисте при загрузке
+
     WishlistService.fetchWishlist().then(({ data }) => {
       setIsInWishlist(data.some((item) => item.id === product.id));
     });
+
+    BasketService.fetchBasket().then(({ data }) => {
+      setIsInBasket(data.some((item) => item.id === product.id));
+    });
+
   }, [product.id]);
 
   const toggleWishlist = async (e) => {
@@ -28,6 +34,20 @@ const ProductItem = observer(({ product }) => {
       setIsInWishlist(!isInWishlist);
     } catch (error) {
       console.error("Ошибка при обновлении вишлиста:", error);
+    }
+  };
+
+  const toggleBasket = async (e) => {
+    e.stopPropagation();
+    try {
+      if (isInBasket) {
+        await BasketService.removeFromBasket(product.id);
+      } else {
+        await BasketService.addToBasket(product.id);
+      }
+      setIsInBasket(!isInBasket);
+    } catch (error) {
+      console.error("Ошибка при обновлении корзины:", error);
     }
   };
 
@@ -86,9 +106,21 @@ const ProductItem = observer(({ product }) => {
       </div>
 
       {/* Кнопка добавления в корзину */}
-      <button className="flex items-center justify-center w-full bg-green-600 hover:bg-green-800 text-white font-medium py-2 px-4 rounded-md shadow-sm transition">
-        <ShoppingCart className="w-5 h-5 mr-2" />
-        Add to Cart
+      <button 
+        className="flex items-center justify-center w-full bg-green-600 hover:bg-green-800 text-white font-medium py-2 px-4 rounded-md shadow-sm transition"
+        onClick={toggleBasket}
+      >
+        {isInBasket ? (
+          <>
+            <ShoppingCart className="w-5 h-5 mr-2" />
+            Удалить из корзины
+          </>
+        ) : (
+          <>
+            <ShoppingCart className="w-5 h-5 mr-2" />
+            Добавить в корзину
+          </>
+        )}
       </button>
     </div>
   );

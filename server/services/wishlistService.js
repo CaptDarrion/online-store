@@ -4,7 +4,7 @@ const { Wishlist, Product, User } = require("../models/models")
 class WishlistService {
     async addToWishlist(userId, productId) {
         if (!productId) {
-            throw new Error("Product ID is required");
+            throw ApiError.badRequest("Product ID is required");
         }
         const wishlist = await Wishlist.create({userId, productId});
         return wishlist;
@@ -28,7 +28,7 @@ class WishlistService {
             });
     
             if (!user) {
-                throw new Error("User not found");
+                throw ApiError.badRequest("User not found");
             }
     
             console.log('Fetched wishlist:', user.get('wishlistProducts'));
