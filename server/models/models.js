@@ -16,10 +16,9 @@ const Wishlist = sequelize.define("wishlist", {
   productId: { type: DataTypes.INTEGER, allowNull: false },
 });
 
-
 const Token = sequelize.define("token", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  refreshToken: { type: DataTypes.STRING, allowNull: true},
+  refreshToken: { type: DataTypes.STRING, allowNull: true },
 });
 
 const Basket = sequelize.define("basket", {
@@ -27,7 +26,6 @@ const Basket = sequelize.define("basket", {
   userId: { type: DataTypes.INTEGER, allowNull: false },
   productId: { type: DataTypes.INTEGER, allowNull: false },
 });
-
 
 const Rating = sequelize.define("rating", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -38,6 +36,7 @@ const Product = sequelize.define("product", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
   price: { type: DataTypes.INTEGER, allowNull: false },
+  quantity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   rating: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: true },
   img: { type: DataTypes.STRING, allowNull: false },
 });
@@ -51,7 +50,7 @@ const ProductInfo = sequelize.define("product_info", {
 const Category = sequelize.define("category", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
-  parentId: { type: DataTypes.INTEGER, allowNull: true},
+  parentId: { type: DataTypes.INTEGER, allowNull: true },
 });
 
 const Brand = sequelize.define("brand", {
@@ -63,33 +62,51 @@ const BrandCategory = sequelize.define("brand_category", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
-
 User.hasMany(Rating);
 Rating.belongsTo(User);
 
-User.hasOne(Token, { onDelete: "CASCADE"});
+User.hasOne(Token, { onDelete: "CASCADE" });
 Token.belongsTo(User);
 
-User.belongsToMany(Product, { through: Wishlist, as: 'wishlistProducts', onDelete: "CASCADE" });
-Product.belongsToMany(User, { through: Wishlist, as: 'wishlistUsers', onDelete: "CASCADE" });
+User.belongsToMany(Product, {
+  through: Wishlist,
+  as: "wishlistProducts",
+  onDelete: "CASCADE",
+});
+Product.belongsToMany(User, {
+  through: Wishlist,
+  as: "wishlistUsers",
+  onDelete: "CASCADE",
+});
 
-User.belongsToMany(Product, { through: Basket, as: 'basketProducts', onDelete: "CASCADE" });
-Product.belongsToMany(User, { through: Basket, as: 'basketUsers', onDelete: "CASCADE" });
-
+User.belongsToMany(Product, {
+  through: Basket,
+  as: "basketProducts",
+  onDelete: "CASCADE",
+});
+Product.belongsToMany(User, {
+  through: Basket,
+  as: "basketUsers",
+  onDelete: "CASCADE",
+});
 
 Product.hasMany(Rating);
 Rating.belongsTo(Product);
 
-Product.hasMany(ProductInfo, { as: 'info' });
+Product.hasMany(ProductInfo, { as: "info" });
 ProductInfo.belongsTo(Product);
 
-Category.hasMany(Product, { onDelete: 'CASCADE'} );
+Category.hasMany(Product, { onDelete: "CASCADE" });
 Product.belongsTo(Category);
 
-Category.hasMany(Category, { as: "subcategories", foreignKey: "parentId", onDelete: 'CASCADE' });
+Category.hasMany(Category, {
+  as: "subcategories",
+  foreignKey: "parentId",
+  onDelete: "CASCADE",
+});
 Category.belongsTo(Category, { as: "parent", foreignKey: "parentId" });
 
-Brand.hasMany(Product, { onDelete: 'CASCADE'} );
+Brand.hasMany(Product, { onDelete: "CASCADE" });
 Product.belongsTo(Brand);
 
 Brand.belongsToMany(Category, { through: BrandCategory });
@@ -105,5 +122,5 @@ module.exports = {
   Brand,
   BrandCategory,
   Token,
-  Wishlist
+  Wishlist,
 };

@@ -12,7 +12,6 @@ const ProductItem = observer(({ product }) => {
   const [isInBasket, setIsInBasket] = useState(false);
 
   useEffect(() => {
-
     WishlistService.fetchWishlist().then(({ data }) => {
       setIsInWishlist(data.some((item) => item.id === product.id));
     });
@@ -20,7 +19,6 @@ const ProductItem = observer(({ product }) => {
     BasketService.fetchBasket().then(({ data }) => {
       setIsInBasket(data.some((item) => item.id === product.id));
     });
-
   }, [product.id]);
 
   const toggleWishlist = async (e) => {
@@ -52,8 +50,10 @@ const ProductItem = observer(({ product }) => {
   };
 
   return (
-    <div className="relative bg-white border border-gray-200 rounded-lg shadow-md p-3 transition hover:shadow-lg hover:border-green-500"
-    onClick={() => navigate(PRODUCT_ROUTE + '/' + product.id) }>
+    <div
+      className="relative bg-white border border-gray-200 rounded-lg shadow-md p-3 transition hover:shadow-lg hover:border-green-500"
+      onClick={() => navigate(PRODUCT_ROUTE + "/" + product.id)}
+    >
       {/* Изображение товара */}
       <img
         src={`http://localhost:5000/${product.img}`}
@@ -61,9 +61,9 @@ const ProductItem = observer(({ product }) => {
         className="w-full h-48 object-contain rounded-md mb-2"
       />
 
-     {/* Иконки сверху */}
-     <div className="absolute top-2 right-2 flex space-x-1">
-        <button 
+      {/* Иконки сверху */}
+      <div className="absolute top-2 right-2 flex space-x-1">
+        <button
           className="bg-white p-2 rounded-full shadow-sm hover:shadow transition"
           onClick={toggleWishlist}
         >
@@ -89,7 +89,15 @@ const ProductItem = observer(({ product }) => {
       </p>
 
       {/* Наличие */}
-      <p className="text-green-600 text-sm font-medium mb-2">В наличии</p>
+      <p
+        className={`text-sm font-medium mb-2 ${
+          product.quantity === 0 ? "text-red-600" : "text-green-600"
+        }`}
+      >
+        {product.quantity === 0
+          ? "Нет в наличии"
+          : `В наличии ${product.quantity}`}
+      </p>
 
       {/* Рейтинг */}
       <div className="flex items-center text-yellow-400 text-xs mb-3">
@@ -106,7 +114,7 @@ const ProductItem = observer(({ product }) => {
       </div>
 
       {/* Кнопка добавления в корзину */}
-      <button 
+      <button
         className="flex items-center justify-center w-full bg-green-600 hover:bg-green-800 text-white font-medium py-2 px-4 rounded-md shadow-sm transition"
         onClick={toggleBasket}
       >

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import ProductService from "../services/ProductService";
 import WishlistService from "../services/WishlistService";
 import BasketService from "../services/BasketService";
-import {Heart, HeartOff, ShoppingCart } from "lucide-react";
+import { Heart, HeartOff, ShoppingCart } from "lucide-react";
 
 const ProductPage = () => {
   const [product, setProduct] = useState({ info: [] });
@@ -112,10 +112,16 @@ const ProductPage = () => {
               <p className="text-3xl font-bold text-gray-800 mb-3">
                 {product.price} грн
               </p>
-              <p className="text-sm text-green-600 font-semibold mb-4">
-                В наличии
+              <p
+                className={`text-sm font-medium mb-2 ${
+                  product.quantity === 0 ? "text-red-600" : "text-green-600"
+                }`}
+              >
+                {product.quantity === 0
+                  ? "Нет в наличии"
+                  : `В наличии ${product.quantity}`}
               </p>
-                {/* Кнопка добавления в корзину */}
+              {/* Кнопка добавления в корзину */}
               <button
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 text-lg font-medium"
                 onClick={toggleBasket}
@@ -132,7 +138,7 @@ const ProductPage = () => {
                   </>
                 )}
               </button>
-              
+
               {/* Кнопка добавления в список желаемого */}
               <button
                 className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 text-lg font-medium mt-3"
@@ -230,7 +236,9 @@ const ProductPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-600">Нет характеристик для этого товара</p>
+                  <p className="text-gray-600">
+                    Нет характеристик для этого товара
+                  </p>
                 )}
               </div>
             )}

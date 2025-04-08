@@ -1,0 +1,137 @@
+[33mcommit 1199eea95e82f83c041ca6285aee2ce795265eae[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Fri Apr 4 22:14:47 2025 +0300
+
+    Added paths and user page, changed button icons
+
+[33mcommit f03dd2d16afe598bdf32f6ec468c6977b32d1eca[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Fri Apr 4 21:42:52 2025 +0300
+
+    Added pagination
+
+[33mcommit 29f8918d4dc6e9acc7b8bd225ee27ac501412edb[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Fri Apr 4 19:38:08 2025 +0300
+
+    Added user cart and functionality to buttons on the page of a specific product
+
+[33mcommit 40a6b8d2759159e2d0df602212347d362f2d3b69[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Fri Mar 7 09:07:45 2025 +0200
+
+    Changed the database structure, fixed the bug with wishlist, slightly changed the design of wishlist
+
+[33mcommit 2e492aa4abc9ce0f9d7252df406007345965fbc2[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Tue Mar 4 09:43:29 2025 +0200
+
+    Implemented a wishlist implementation, changed the buttons on the navbar, improved the visual of the search bar in the navbar
+
+[33mcommit 9d0136bbc57562018d9dacb315ddae9cfced1581[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Sun Mar 2 16:14:22 2025 +0200
+
+    Integrated Fuse.js with thhe search bar, changed the product page
+
+[33mcommit c4ce2c0bc896b05bd79a764d1ab005780f62367f[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Sun Mar 2 04:20:04 2025 +0200
+
+    3 sections of the admin panel have been completed, added Blog, Contacts, Brand pages
+
+[33mcommit 69cc5095ec7287d1fdf213df9d1771b18066d766[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Sun Mar 2 00:34:09 2025 +0200
+
+    Brand and category management implemented
+
+[33mcommit f616babd24a9b63ea2b6de97b328be4c7c7ef87d[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Tue Feb 25 03:26:49 2025 +0200
+
+    I finished the user management section in the admin panel, started the brand management section, added an adaptive card option and error handlers for various cases
+
+[33mcommit df65b8d055c2f10219fc91861372e5b77fcd8277[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Mon Feb 24 16:25:42 2025 +0200
+
+    Made a product page, made some functionality in the admin panel
+
+[33mcommit b65daa58485bd35f2a3b281c66f18e85198d1634[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Fri Feb 21 01:50:57 2025 +0200
+
+    Added services for downloading categories, brands, and products from the server, hardcoded loading of product images(will need to be changed) and added more pages with their own routes
+
+[33mcommit 813efa1b90d75e2d633d7ee957d236b3d2941a85[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Tue Feb 18 18:27:35 2025 +0200
+
+    Added an adaptive feature, created subcategories by category, started making a Shop page
+
+[33mcommit 6f416d8d325087121b63bf7cf8543fb3e4e152ce[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Mon Feb 17 22:55:00 2025 +0200
+
+    Added logic that checks the user role and a test function in the admin panel
+
+[33mcommit c08eb366a80a640a97f9df9274ec2bb32b6dc68f[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Mon Feb 17 22:53:08 2025 +0200
+
+    Added logic that checks the user role and a test function in the admin panel
+
+[33mcommit 38da31c94290ce6c580d8ecb1ed7c25c898a120b[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Mon Feb 17 15:03:10 2025 +0200
+
+    Made a small refactoring, authorization and navigation are fully working
+
+[33mcommit 8ea65efc454537602d29e119297e03a0f4e124a3[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Wed Feb 12 13:18:41 2025 +0200
+
+    Moved the client part from TS to JS
+
+[33mcommit 243073421e59be9d4a4cfc7faef4c4d47802d0e6[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Wed Feb 12 12:42:42 2025 +0200
+
+    added check for ADMIN role
+
+[33mcommit 2d87e1c59f7b3dd1ff70235726b8dcdbe88ca8bb[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Tue Feb 11 06:25:54 2025 +0200
+
+    Started the client part and finished authorization
+
+[33mcommit 8d77c58169decfa7c9850f04e599838218c134f0[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Wed Feb 5 14:19:32 2025 +0200
+
+    Added a token validity check, a token update function, a middleware that checks wherher the user is authorized and a test function for it to display all users
+
+[33mcommit ee7de1c79e93b16b02fe4c0b8f9bc0744dd0ca0a[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Wed Feb 5 12:47:40 2025 +0200
+
+    Services have been added to implement registration, account activation, login, logout, token generation, token saving, token deletion, sending an activation message by email, the database model has also been updated
+
+[33mcommit d59432913c8b98b42dc5ee04d9a9787ad73bf0a5[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Mon Feb 3 07:39:06 2025 +0200
+
+    Added controllers get All, getOne, cascade deletion to brand, category, product
+
+[33mcommit 57278edd8353ed4b3a97b0c397015f0c4a95513e[m
+Author: Shabenevych Vladislav <gamer.woke@gmail.com>
+Date:   Mon Feb 3 05:40:07 2025 +0200
+
+    Deleting from the database
+
+[33mcommit cb60acaafa97d85f399e4d0e51d38d4cab040adb[m
+Author: Shabenevych Vladislav <shabanevich@onua.edu.ua>
+Date:   Mon Feb 3 03:10:20 2025 +0200
+
+    first commit
