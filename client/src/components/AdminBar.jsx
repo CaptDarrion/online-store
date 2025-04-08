@@ -16,9 +16,9 @@ const AdminBar = ({ onSelect }) => {
       </button>
 
       <div
-        className={`bg-white border border-green-200 p-4 rounded-lg shadow-lg transition-all duration-300 ${
-          isSidebarOpen ? "block" : "hidden"
-        } md:block`}
+        className={`bg-white border border-green-200 p-4 rounded-lg shadow-lg transition-all duration-300
+      ${isSidebarOpen ? "block" : "hidden"} md:block
+      w-full md:min-w-[240px] md:max-w-[240px] md:h-auto`}
       >
         <h2 className="text-lg font-bold mb-3 text-gray-800">Админ панель</h2>
         <div className="space-y-2">

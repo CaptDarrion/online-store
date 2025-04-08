@@ -62,6 +62,59 @@ const BrandCategory = sequelize.define("brand_category", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
+const Order = sequelize.define("order", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userId: { type: DataTypes.INTEGER, allowNull: false },
+  name: { type: DataTypes.STRING, allowNull: false },
+  phone: { type: DataTypes.STRING, allowNull: false },
+  address: { type: DataTypes.STRING, allowNull: false },
+  paymentMethod: {
+    type: DataTypes.ENUM(
+      "Оплата при отриманні",
+      "Оплата карткою при оформленні"
+    ),
+    allowNull: false,
+  },
+
+  paymentStatus: {
+    type: DataTypes.ENUM("Сплачено карткою", "Вибрано оплату при отриманні"),
+    allowNull: false,
+  },
+  status: {
+    type: DataTypes.ENUM(
+      "Чекає на підтвердження",
+      "Заказ підтверджено",
+      "Замовлення укомплектовується",
+      "Замовлення передано на доставку",
+      "Замовлення доставлено",
+      "Замовлення завершено",
+      "Скасовано адміністратором",
+      "Скасовано користувачем",
+      "Оформлено повернення"
+    ),
+    allowNull: false,
+    defaultValue: "Чекає на підтвердження",
+  },
+});
+
+const OrderItem = sequelize.define("order_item", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING, allowNull: false },
+  price: { type: DataTypes.INTEGER, allowNull: false },
+  quantity: { type: DataTypes.INTEGER, allowNull: false },
+  img: { type: DataTypes.STRING, allowNull: true },
+});
+
+Order.hasMany(OrderItem, {
+  as: "items",
+  foreignKey: "orderId",
+  onDelete: "CASCADE",
+});
+OrderItem.belongsTo(Order, { foreignKey: "orderId" });
+
+Product.hasMany(OrderItem);
+OrderItem.belongsTo(Product);
+
 User.hasMany(Rating);
 Rating.belongsTo(User);
 
@@ -123,4 +176,6 @@ module.exports = {
   BrandCategory,
   Token,
   Wishlist,
+  Order,
+  OrderItem,
 };

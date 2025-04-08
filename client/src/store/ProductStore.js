@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from "mobx";
 
 export default class ProductStore {
   constructor() {
@@ -15,8 +15,28 @@ export default class ProductStore {
     this.categories = categories;
   }
 
+  addCategory(category) {
+    this.categories.push(category);
+  }
+
+  removeCategoryByName(name) {
+    this.categories = this.categories.filter((c) => c.name !== name);
+  }
+
+  removeCategoryById(id) {
+    this.categories = this.categories.filter((c) => c.id !== id);
+  }
+
   setBrands(brands) {
     this.brands = brands;
+  }
+
+  addBrand(brand) {
+    this.brands.push(brand);
+  }
+
+  removeBrandByName(name) {
+    this.brands = this.brands.filter((b) => b.name !== name);
   }
 
   setProducts(products) {
@@ -28,7 +48,7 @@ export default class ProductStore {
     this.page = page;
   }
 
-  setTotalCount (totalCount) {
+  setTotalCount(totalCount) {
     this.totalCount = totalCount;
   }
 

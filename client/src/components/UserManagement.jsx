@@ -101,62 +101,56 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start min-h-screen p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
-        Управление пользователями
-      </h2>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-6">Управление пользователями</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Карточка загрузки пользователей */}
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[350px] mx-auto border border-green-600">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Загрузить пользователей
-          </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        {/* Загрузка пользователей */}
+        <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-green-600">
+          <h3 className="font-semibold mb-4">Загрузить пользователей</h3>
           <button
             onClick={fetchUsersHandler}
-            className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-800 transition"
+            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-800"
           >
             Загрузить
           </button>
         </div>
 
-        {/* Карточка удаления пользователя по email */}
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[350px] mx-auto border border-red-600">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Удалить пользователя по email
-          </h3>
+        {/* Удаление пользователя */}
+        <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-red-600">
+          <h3 className="font-semibold mb-4">Удалить пользователя по email</h3>
           <input
             type="email"
             value={deleteEmail}
             onChange={(e) => setDeleteEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded mb-4"
+            className="w-full mb-4 p-2 border rounded"
             placeholder="Введите email"
           />
           <button
             onClick={deleteUserByEmail}
-            className="w-full bg-red-600 text-white p-2 rounded hover:bg-red-800 transition"
+            className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-800"
           >
             Удалить
           </button>
           {deleteError && (
-            <div className="mt-4 text-red-600">{deleteError}</div>
+            <div className="text-red-600 mt-2">{deleteError}</div>
           )}
         </div>
 
-        {/* Карточка списка пользователей */}
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[350px] mx-auto border border-green-600">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Список пользователей
-          </h3>
+        {/* Список пользователей */}
+        <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-green-600">
+          <h3 className="font-semibold mb-4">Список пользователей</h3>
           {users.length > 0 ? (
-            <ul className="mt-2 space-y-2 max-h-60 overflow-auto">
+            <ul className="space-y-2 max-h-60 overflow-auto">
               {users.map((user) => (
-                <li key={user.id} className="p-2 border-b border-gray-300">
-                  <span className="block text-gray-700">{user.email}</span>
-                  <span className="block text-gray-500">{user.role}</span>
+                <li key={user.id} className="border-b py-2">
+                  <span className="block">{user.email}</span>
+                  <span className="block text-sm text-gray-500">
+                    {user.role}
+                  </span>
                   <button
                     onClick={() => openModal(user.email)}
-                    className="mt-2 bg-red-600 text-white p-1 rounded hover:bg-red-800 transition"
+                    className="mt-2 bg-red-600 text-white px-2 py-1 rounded hover:bg-red-800"
                   >
                     Удалить
                   </button>
@@ -164,95 +158,87 @@ const UserManagement = () => {
               ))}
             </ul>
           ) : (
-            <p className="text-center text-gray-600 mt-4">
-              Пользователи не загружены
-            </p>
+            <p className="text-gray-600">Пользователи не загружены</p>
           )}
         </div>
 
-        {/* Карточка загрузки администраторов */}
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[350px] mx-auto border border-blue-600">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Загрузить администраторов
-          </h3>
+        {/* Загрузка админов */}
+        <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-blue-600">
+          <h3 className="font-semibold mb-4">Загрузить администраторов</h3>
           <button
             onClick={fetchAdminsHandler}
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-800 transition"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-800"
           >
             Загрузить
           </button>
         </div>
 
-        {/* Карточка списка администраторов */}
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[350px] mx-auto border border-blue-600">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Список администраторов
-          </h3>
+        {/* Список админов */}
+        <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-blue-600">
+          <h3 className="font-semibold mb-4">Список администраторов</h3>
           {admins.length > 0 ? (
-            <ul className="mt-2 space-y-2 max-h-60 overflow-auto">
+            <ul className="space-y-2 max-h-60 overflow-auto">
               {admins.map((admin) => (
-                <li key={admin.id} className="p-2 border-b border-gray-300">
-                  <span className="block text-gray-700">{admin.email}</span>
-                  <span className="block text-gray-500">{admin.role}</span>
+                <li key={admin.id} className="border-b py-2">
+                  <span className="block">{admin.email}</span>
+                  <span className="block text-sm text-gray-500">
+                    {admin.role}
+                  </span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-center text-gray-600 mt-4">
-              Администраторы не загружены
-            </p>
+            <p className="text-gray-600">Администраторы не загружены</p>
           )}
         </div>
 
-        {/* Карточка создания пользователя */}
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[350px] mx-auto border border-blue-600">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Создать пользователя
-          </h3>
+        {/* Создание пользователя */}
+        <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-blue-600">
+          <h3 className="font-semibold mb-4">Создать пользователя</h3>
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded mb-4"
+            className="w-full p-2 border rounded mb-4"
           />
           <input
             type="password"
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded mb-4"
+            className="w-full p-2 border rounded mb-4"
           />
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded mb-4"
+            className="w-full p-2 border rounded mb-4"
           >
             <option value="USER">Пользователь</option>
             <option value="ADMIN">Администратор</option>
           </select>
           <button
             onClick={createUserHandler}
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-800 transition"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-800"
           >
             Создать пользователя
           </button>
           {createUserError && (
-            <div className="mt-4 text-red-600">{createUserError}</div>
+            <div className="text-red-600 mt-2">{createUserError}</div>
           )}
         </div>
       </div>
 
+      {/* Модалка */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex justify-center bg-gray-200 items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96 border border-red-900">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Подтвердите удаление
-            </h3>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-30">
+          <div className="bg-white p-6 rounded shadow-lg w-96 border border-red-900">
+            <h3 className="font-semibold mb-4">Подтвердите удаление</h3>
             <p>
-              Вы уверены, что хотите удалить пользователя {deleteEmail}?
+              Вы уверены, что хотите удалить пользователя{" "}
+              <strong>{deleteEmail}</strong>?
             </p>
-            <div className="mt-4 flex justify-between">
+            <div className="flex justify-end mt-6 gap-2">
               <button
                 onClick={deleteUserHandler}
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
@@ -261,7 +247,7 @@ const UserManagement = () => {
               </button>
               <button
                 onClick={closeModal}
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-500"
+                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-500"
               >
                 Отмена
               </button>
