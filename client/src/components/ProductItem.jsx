@@ -1,51 +1,33 @@
 import { observer } from "mobx-react";
+import { useContext } from "react";
 import { Star, ShoppingCart, Heart, HeartOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Context } from "../main";
 import { PRODUCT_ROUTE } from "../utils/consts";
-import WishlistService from "../services/WishlistService";
-import BasketService from "../services/BasketService";
-import { useEffect, useState } from "react";
 
 const ProductItem = observer(({ product }) => {
   const navigate = useNavigate();
-  const [isInWishlist, setIsInWishlist] = useState(false);
-  const [isInBasket, setIsInBasket] = useState(false);
+  const { product: productStore } = useContext(Context);
 
-  useEffect(() => {
-    WishlistService.fetchWishlist().then(({ data }) => {
-      setIsInWishlist(data.some((item) => item.id === product.id));
-    });
+  // Реактивно проверяем состояние
+  const isInBasket = productStore.isItemInBasket(product.id);
+  const isInWishlist = productStore.hasInWishlist(product.id);
 
-    BasketService.fetchBasket().then(({ data }) => {
-      setIsInBasket(data.some((item) => item.id === product.id));
-    });
-  }, [product.id]);
-
-  const toggleWishlist = async (e) => {
+  const toggleWishlist = (e) => {
     e.stopPropagation();
-    try {
-      if (isInWishlist) {
-        await WishlistService.removeFromWishlist(product.id);
-      } else {
-        await WishlistService.addToWishlist(product.id);
-      }
-      setIsInWishlist(!isInWishlist);
-    } catch (error) {
-      console.error("Ошибка при обновлении вишлиста:", error);
+    if (isInWishlist) {
+      productStore.removeFromWishlist(product.id);
+    } else {
+      productStore.addToWishlist(product);
     }
   };
 
-  const toggleBasket = async (e) => {
+  const handleButtonClick = (e) => {
     e.stopPropagation();
-    try {
-      if (isInBasket) {
-        await BasketService.removeFromBasket(product.id);
-      } else {
-        await BasketService.addToBasket(product.id);
-      }
-      setIsInBasket(!isInBasket);
-    } catch (error) {
-      console.error("Ошибка при обновлении корзины:", error);
+    if (isInBasket) {
+      productStore.removeFromBasket(product.id);
+    } else {
+      productStore.addToBasket(product);
     }
   };
 
@@ -54,14 +36,12 @@ const ProductItem = observer(({ product }) => {
       className="relative bg-white border border-gray-200 rounded-lg shadow-md p-3 transition hover:shadow-lg hover:border-green-500"
       onClick={() => navigate(PRODUCT_ROUTE + "/" + product.id)}
     >
-      {/* Изображение товара */}
       <img
         src={`http://localhost:5000/${product.img}`}
         alt={product.name}
         className="w-full h-48 object-contain rounded-md mb-2"
       />
 
-      {/* Иконки сверху */}
       <div className="absolute top-2 right-2 flex space-x-1">
         <button
           className="bg-white p-2 rounded-full shadow-sm hover:shadow transition"
@@ -75,20 +55,13 @@ const ProductItem = observer(({ product }) => {
         </button>
       </div>
 
-      {/* Название товара */}
       <h3 className="text-sm font-medium text-gray-800 mb-2 truncate">
         {product.name}
       </h3>
-
-      {/* Код товара */}
       <p className="text-xs text-gray-500 mb-1">Код товара: {product.id}</p>
-
-      {/* Цена */}
       <p className="text-gray-600 text-base font-semibold mb-1">
         {product.price} грн
       </p>
-
-      {/* Наличие */}
       <p
         className={`text-sm font-medium mb-2 ${
           product.quantity === 0 ? "text-red-600" : "text-green-600"
@@ -99,7 +72,6 @@ const ProductItem = observer(({ product }) => {
           : `В наличии ${product.quantity}`}
       </p>
 
-      {/* Рейтинг */}
       <div className="flex items-center text-yellow-400 text-xs mb-3">
         {Array(5)
           .fill(0)
@@ -113,10 +85,9 @@ const ProductItem = observer(({ product }) => {
           ))}
       </div>
 
-      {/* Кнопка добавления в корзину */}
       <button
-        className="flex items-center justify-center w-full bg-green-600 hover:bg-green-800 text-white font-medium py-2 px-4 rounded-md shadow-sm transition"
-        onClick={toggleBasket}
+        className="flex items-center justify-center w-full bg-green-600 hover:bg-green-800 text-white font-medium py-2 px-4 rounded-md shadow-sm transition mt-4"
+        onClick={handleButtonClick}
       >
         {isInBasket ? (
           <>

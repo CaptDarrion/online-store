@@ -1,74 +1,83 @@
-import { makeAutoObservable } from "mobx"
-import AuthService from '../services/AuthService'
-import axios from "axios"
-import { API_URL } from "../http"
-
+import { makeAutoObservable } from "mobx";
+import AuthService from "../services/AuthService";
+import axios from "axios";
+import { API_URL } from "../http";
 
 export default class UserStore {
-    constructor() {
-        this.isAuth = false
-        this.user = {}
-        makeAutoObservable(this)
-    }
-    
-    setAuth(bool) {
-        this.isAuth = bool;
-    }
+  product;
+  constructor(product) {
+    this.product = product;
 
-    setUser(user) {
-        this.user = user;
-    }
+    this.isAuth = false;
+    this.user = {};
+    makeAutoObservable(this);
+  }
 
-    get role() {
-        return this.user?.role;
-    }
+  setAuth(bool) {
+    this.isAuth = bool;
+  }
 
-    async login(email, password) {
-        try {
-            const response = await AuthService.login(email, password);
-            console.log(response);
-            localStorage.setItem('token', response.data.accessToken);
-            this.setAuth(true);
-            this.setUser(response.data.user);
-        } catch (e) {
-            console.log(e.response?.data?.message);
-        }
-    }
+  setUser(user) {
+    this.user = user;
+  }
 
-    async registration(email, password) {
-        try {
-            const response = await AuthService.registration(email, password);
-            console.log(response);
-            localStorage.setItem('token', response.data.accessToken);
-            this.setAuth(true);
-            this.setUser(response.data.user);
-        } catch (e) {
-            console.log(e.response?.data?.message);
-        }
-    }
+  get role() {
+    return this.user?.role;
+  }
 
-    async logout() {
-        try {
-            const response = await AuthService.logout();
-            console.log(response);
-            localStorage.removeItem('token');
-            this.setAuth(false);
-            this.setUser({});
-        } catch (e) {
-            console.log(e.response?.data?.message);
-        }
-    }
+  async login(email, password) {
+    try {
+      const response = await AuthService.login(email, password);
+      console.log(response);
+      localStorage.setItem("token", response.data.accessToken);
+      this.setAuth(true);
+      this.setUser(response.data.user);
 
-    async checkAuth() {
-        try {
-            const response = await axios.get(`${API_URL}/refresh`, { withCredentials: true });
-            console.log(response);
-            localStorage.setItem('token', response.data.accessToken);
-            this.setAuth(true);
-            this.setUser(response.data.user);
-        } catch (e) {
-            console.log(e.response?.data?.message);
-        }
+      this.product.loadBasket();
+      this.product.loadWishlist();
+    } catch (e) {
+      console.log(e.response?.data?.message);
     }
+  }
 
+  async registration(email, password) {
+    try {
+      const response = await AuthService.registration(email, password);
+      console.log(response);
+      localStorage.setItem("token", response.data.accessToken);
+      this.setAuth(true);
+      this.setUser(response.data.user);
+    } catch (e) {
+      console.log(e.response?.data?.message);
+    }
+  }
+
+  async logout() {
+    try {
+      const response = await AuthService.logout();
+      console.log(response);
+      localStorage.removeItem("token");
+      this.setAuth(false);
+      this.setUser({});
+
+      this.product.basketItems = [];
+      this.product.wishlistItems = [];
+    } catch (e) {
+      console.log(e.response?.data?.message);
+    }
+  }
+
+  async checkAuth() {
+    try {
+      const response = await axios.get(`${API_URL}/refresh`, {
+        withCredentials: true,
+      });
+      console.log(response);
+      localStorage.setItem("token", response.data.accessToken);
+      this.setAuth(true);
+      this.setUser(response.data.user);
+    } catch (e) {
+      console.log(e.response?.data?.message);
+    }
+  }
 }
