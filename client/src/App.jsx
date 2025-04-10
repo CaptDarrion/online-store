@@ -17,6 +17,7 @@ const App = observer(() => {
     };
     product.loadWishlist();
     product.loadBasket();
+    user.fetchProfile();
     checkAuthAsync();
   }, [product, user]);
 

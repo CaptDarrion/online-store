@@ -6,7 +6,7 @@ export default class ProductStore {
   constructor() {
     this.categories = [];
     this.brands = [];
-    this.products = []; // Пагинированный список товаров
+    this.products = [];
     this.page = 1;
     this.totalCount = 8;
     this.limit = 20;
@@ -16,7 +16,7 @@ export default class ProductStore {
     makeAutoObservable(this);
   }
 
-  // ======= Категории =======
+  // Категории
   setCategories(categories) {
     this.categories = categories;
   }
@@ -30,7 +30,7 @@ export default class ProductStore {
     this.categories = this.categories.filter((c) => c.id !== id);
   }
 
-  // ======= Бренды =======
+  // Бренды
   setBrands(brands) {
     this.brands = brands;
   }
@@ -41,7 +41,7 @@ export default class ProductStore {
     this.brands = this.brands.filter((b) => b.name !== name);
   }
 
-  // ======= Продукты =======
+  // Товары, пагинация
   setProducts(products) {
     this.products = products.rows || [];
     this.totalCount = products.count || 0;
@@ -63,7 +63,7 @@ export default class ProductStore {
     }
   }
 
-  // ======= Корзина =======
+  // Корзина
   async loadBasket() {
     try {
       const response = await BasketService.fetchBasket();
@@ -94,11 +94,10 @@ export default class ProductStore {
     return this.basketItems.some((item) => item.id === itemId);
   }
 
-  // ======= Избранное =======
+  // Вишлист
   async loadWishlist() {
     try {
       const response = await WishlistService.fetchWishlist();
-      // Предполагаем, что API возвращает полный объект товара
       this.wishlistItems = response.data;
     } catch (e) {
       console.error("Ошибка загрузки избранного:", e);
@@ -107,7 +106,6 @@ export default class ProductStore {
   async addToWishlist(item) {
     try {
       await WishlistService.addToWishlist(item.id);
-      // Если товара ещё нет в избранном, добавляем его
       if (!this.wishlistItems.find((i) => i.id === item.id)) {
         this.wishlistItems.push(item);
       }

@@ -10,6 +10,31 @@ const User = sequelize.define("user", {
   activationLink: { type: DataTypes.STRING, allowNull: true },
 });
 
+const UserInfo = sequelize.define("user_info", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    unique: true,
+    references: {
+      model: "users",
+      key: "id",
+    },
+  },
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+});
+
 const Wishlist = sequelize.define("wishlist", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   userId: { type: DataTypes.INTEGER, allowNull: false },
@@ -18,7 +43,7 @@ const Wishlist = sequelize.define("wishlist", {
 
 const Token = sequelize.define("token", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  refreshToken: { type: DataTypes.STRING, allowNull: true },
+  refreshToken: { type: DataTypes.STRING(1024), allowNull: true },
 });
 
 const Basket = sequelize.define("basket", {
@@ -115,6 +140,9 @@ OrderItem.belongsTo(Order, { foreignKey: "orderId" });
 Product.hasMany(OrderItem);
 OrderItem.belongsTo(Product);
 
+User.hasOne(UserInfo, { foreignKey: "userId", as: "profile" });
+UserInfo.belongsTo(User, { foreignKey: "userId", as: "user" });
+
 User.hasMany(Rating);
 Rating.belongsTo(User);
 
@@ -126,6 +154,7 @@ User.belongsToMany(Product, {
   as: "wishlistProducts",
   onDelete: "CASCADE",
 });
+
 Product.belongsToMany(User, {
   through: Wishlist,
   as: "wishlistUsers",
@@ -167,6 +196,7 @@ Category.belongsToMany(Brand, { through: BrandCategory });
 
 module.exports = {
   User,
+  UserInfo,
   Basket,
   Rating,
   Product,

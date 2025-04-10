@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import AuthService from "../services/AuthService";
+import UserService from "../services/UserService";
 import axios from "axios";
 import { API_URL } from "../http";
 
@@ -10,6 +11,7 @@ export default class UserStore {
 
     this.isAuth = false;
     this.user = {};
+    this.profile = {};
     makeAutoObservable(this);
   }
 
@@ -19,6 +21,10 @@ export default class UserStore {
 
   setUser(user) {
     this.user = user;
+  }
+
+  setProfile(profile) {
+    this.profile = profile;
   }
 
   get role() {
@@ -76,6 +82,29 @@ export default class UserStore {
       localStorage.setItem("token", response.data.accessToken);
       this.setAuth(true);
       this.setUser(response.data.user);
+    } catch (e) {
+      console.log(e.response?.data?.message);
+    }
+  }
+
+  async fetchProfile() {
+    try {
+      const response = await UserService.fetchProfile();
+      this.setProfile(response.data.profile);
+    } catch (e) {
+      console.error(e.response?.data?.message);
+    }
+  }
+
+  async updateProfile(firstName, lastName, phone) {
+    try {
+      const response = await UserService.updateProfile(
+        firstName,
+        lastName,
+        phone
+      );
+      console.log("Profile updated:", response);
+      this.setProfile(response.data);
     } catch (e) {
       console.log(e.response?.data?.message);
     }
