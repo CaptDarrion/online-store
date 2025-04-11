@@ -72,6 +72,11 @@ class ProductController {
     return res.json(products);
   }
 
+  async getAllWithoutPagination(req, res) {
+    const product = await Product.findAll();
+    return res.json(product);
+  }
+
   async getOne(req, res) {
     const { id } = req.params;
     const product = await Product.findOne({

@@ -41,6 +41,7 @@ export default class UserStore {
 
       this.product.loadBasket();
       this.product.loadWishlist();
+      this.fetchProfile();
     } catch (e) {
       console.log(e.response?.data?.message);
     }
@@ -65,6 +66,7 @@ export default class UserStore {
       localStorage.removeItem("token");
       this.setAuth(false);
       this.setUser({});
+      this.setProfile({});
 
       this.product.basketItems = [];
       this.product.wishlistItems = [];

@@ -15,9 +15,11 @@ const App = observer(() => {
         await user.checkAuth();
       }
     };
+    product.loadAllProduct();
     product.loadWishlist();
     product.loadBasket();
     user.fetchProfile();
+
     checkAuthAsync();
   }, [product, user]);
 

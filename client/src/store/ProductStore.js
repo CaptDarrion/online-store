@@ -1,12 +1,14 @@
 import { makeAutoObservable } from "mobx";
 import BasketService from "../services/BasketService";
 import WishlistService from "../services/WishlistService";
+import ProductService from "../services/ProductService";
 
 export default class ProductStore {
   constructor() {
     this.categories = [];
     this.brands = [];
     this.products = [];
+    this.allProducts = [];
     this.page = 1;
     this.totalCount = 8;
     this.limit = 20;
@@ -46,6 +48,16 @@ export default class ProductStore {
     this.products = products.rows || [];
     this.totalCount = products.count || 0;
   }
+
+  async loadAllProduct() {
+    try {
+      const response = await ProductService.fetchAllProducts();
+      this.allProducts = response.data;
+    } catch (e) {
+      console.error("Ошибка загрузки всех товаров", e);
+    }
+  }
+
   setPage(page) {
     this.page = page;
   }
@@ -78,8 +90,8 @@ export default class ProductStore {
       if (!this.basketItems.find((i) => i.id === item.id)) {
         this.basketItems.push(item);
       }
-    } catch (error) {
-      console.error("Ошибка добавления в корзину:", error);
+    } catch (e) {
+      console.error("Ошибка добавления в корзину:", e);
     }
   }
   async removeFromBasket(itemId) {
@@ -109,8 +121,8 @@ export default class ProductStore {
       if (!this.wishlistItems.find((i) => i.id === item.id)) {
         this.wishlistItems.push(item);
       }
-    } catch (error) {
-      console.error("Ошибка добавления в избранное:", error);
+    } catch (e) {
+      console.error("Ошибка добавления в избранное:", e);
     }
   }
   async removeFromWishlist(itemId) {

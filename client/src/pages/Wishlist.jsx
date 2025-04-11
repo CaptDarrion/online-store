@@ -10,8 +10,6 @@ const Wishlist = observer(() => {
     product.loadWishlist();
   }, [product]);
 
-  console.log("Wishlist items:", product.wishlistItems);
-
   return (
     <div className="flex flex-col gap-4 p-4">
       <h1 className="text-2xl font-bold mb-4">💚 Избранные товары</h1>

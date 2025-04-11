@@ -9,7 +9,6 @@ const ProductItem = observer(({ product }) => {
   const navigate = useNavigate();
   const { product: productStore } = useContext(Context);
 
-  // Реактивно проверяем состояние
   const isInBasket = productStore.isItemInBasket(product.id);
   const isInWishlist = productStore.hasInWishlist(product.id);
 

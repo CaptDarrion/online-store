@@ -12,7 +12,6 @@ import {
   LOGIN_ROUTE,
   PRODUCT_ROUTE,
   SHOP_ROUTE,
-  USER_PROFILE_ROUTE,
   WISHLIST_ROUTE,
 } from "../utils/consts";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -40,10 +39,10 @@ const NavBar = observer(() => {
       setSearchResults([]);
       return;
     }
-    const fuse = new Fuse(product.products || [], fuseOptions);
+    const fuse = new Fuse(product.allProducts || [], fuseOptions);
     const results = fuse.search(searchQuery);
     setSearchResults(results.map((result) => result.item));
-  }, [searchQuery, product.products, fuseOptions]);
+  }, [searchQuery, fuseOptions, product.allProducts]);
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -59,7 +58,7 @@ const NavBar = observer(() => {
 
   const handleFocus = () => {
     if (searchQuery.trim() !== "") {
-      const fuse = new Fuse(product.products || [], fuseOptions);
+      const fuse = new Fuse(product.allProducts || [], fuseOptions);
       const results = fuse.search(searchQuery);
       setSearchResults(results.map((result) => result.item));
     }
@@ -219,13 +218,6 @@ const NavBar = observer(() => {
               >
                 <Heart className="w-5 h-5 mr-2" />
                 Обране
-              </button>
-              <button
-                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                onClick={() => navigate(USER_PROFILE_ROUTE)}
-              >
-                <LogOut className="w-5 h-5 mr-2" />
-                Профиль
               </button>
               {user.role === "ADMIN" && (
                 <button
