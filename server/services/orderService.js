@@ -1,44 +1,66 @@
 const { Order, OrderItem, Product } = require("../models/models");
+const sequelize = require("../db");
 
 class OrderService {
   async createOrder(userId, orderData, items) {
-    const { name, phone, address, paymentMethod, paymentStatus } = orderData;
+    const transaction = await sequelize.transaction();
+    try {
+      const paymentMethod =
+        orderData.paymentMethod === "card"
+          ? "Оплата карткою при оформленні"
+          : "Оплата при отриманні";
 
-    const order = await Order.create({
-      userId,
-      name,
-      phone,
-      address,
-      paymentMethod,
-      paymentStatus,
-    });
+      const paymentStatus =
+        orderData.paymentMethod === "card"
+          ? "Сплачено карткою"
+          : "Вибрано оплату при отриманні";
 
-    for (const item of items) {
-      const product = await Product.findByPk(item.productId);
-      if (!product) {
-        throw new Error(`Товар с ID ${item.productId} не найден.`);
-      }
+      const order = await Order.create(
+        {
+          userId,
+          name: orderData.name,
+          phone: orderData.phone,
+          address: orderData.address,
+          paymentMethod,
+          paymentStatus,
+        },
+        { transaction }
+      );
 
-      if (product.quantity < item.quantity) {
-        throw new Error(
-          `Недостаточное количество товара "${product.name}" на складе.`
+      for (const item of items) {
+        const product = await Product.findByPk(item.productId, { transaction });
+        if (!product) {
+          throw new Error(`Товар с ID ${item.productId} не найден.`);
+        }
+
+        if (product.quantity < item.quantity) {
+          throw new Error(
+            `Недостаточное количество товара "${product.name}" на складе.`
+          );
+        }
+
+        product.quantity -= item.quantity;
+        await product.save({ transaction });
+
+        await OrderItem.create(
+          {
+            orderId: order.id,
+            productId: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: item.quantity,
+            img: product.img,
+          },
+          { transaction }
         );
       }
 
-      product.quantity -= item.quantity;
-      await product.save();
-
-      await OrderItem.create({
-        orderId: order.id,
-        productId: product.id,
-        name: product.name,
-        price: product.price,
-        quantity: item.quantity,
-        img: product.img,
-      });
+      await transaction.commit();
+      return order;
+    } catch (e) {
+      await transaction.rollback();
+      throw e;
     }
-
-    return order;
   }
 
   async getOrdersByUserId(userId) {
