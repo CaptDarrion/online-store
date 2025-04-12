@@ -43,7 +43,9 @@ export default class UserStore {
       this.product.loadWishlist();
       this.fetchProfile();
     } catch (e) {
-      console.log(e.response?.data?.message);
+      const errorMessage = e.response?.data?.message || "Ошибка авторизации";
+      console.log(errorMessage);
+      throw new Error(errorMessage);
     }
   }
 
@@ -55,7 +57,9 @@ export default class UserStore {
       this.setAuth(true);
       this.setUser(response.data.user);
     } catch (e) {
-      console.log(e.response?.data?.message);
+      const errorMessage = e.response?.data?.message || "Ошибка авторизации";
+      console.log(errorMessage);
+      throw new Error(errorMessage);
     }
   }
 
