@@ -92,7 +92,8 @@ export default class UserStore {
   async fetchProfile() {
     try {
       const response = await UserService.fetchProfile();
-      this.setProfile(response.data.profile);
+      this.setProfile(response.data.profile || response.data);
+      console.log(response.data);
     } catch (e) {
       console.error(e.response?.data?.message);
     }
@@ -106,7 +107,7 @@ export default class UserStore {
         phone
       );
       console.log("Profile updated:", response);
-      this.setProfile(response.data);
+      this.setProfile(response.data.updatedProfile);
     } catch (e) {
       console.log(e.response?.data?.message);
     }

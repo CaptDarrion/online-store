@@ -12,6 +12,7 @@ import {
   LOGIN_ROUTE,
   PRODUCT_ROUTE,
   SHOP_ROUTE,
+  USER_PROFILE_ROUTE,
   WISHLIST_ROUTE,
 } from "../utils/consts";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -219,6 +220,13 @@ const NavBar = observer(() => {
                 <Heart className="w-5 h-5 mr-2" />
                 Обране
               </button>
+              <button
+                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                onClick={() => navigate(USER_PROFILE_ROUTE)}
+              >
+                <LogOut className="w-5 h-5 mr-2" />
+                Профиль
+              </button>
               {user.role === "ADMIN" && (
                 <button
                   className="flex items-center px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition-colors"
@@ -234,7 +242,7 @@ const NavBar = observer(() => {
               className="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition-colors flex items-center"
               onClick={() => navigate(LOGIN_ROUTE)}
             >
-              <LogIn className="w-5 h-5 mr-2" /> {/* Иконка слева от текста */}
+              <LogIn className="w-5 h-5 mr-2" />
               Авторизація
             </button>
           )}

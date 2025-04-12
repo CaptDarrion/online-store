@@ -83,23 +83,31 @@ const ProductItem = observer(({ product }) => {
             />
           ))}
       </div>
-
-      <button
-        className="flex items-center justify-center w-full bg-green-600 hover:bg-green-800 text-white font-medium py-2 px-4 rounded-md shadow-sm transition mt-4"
-        onClick={handleButtonClick}
-      >
-        {isInBasket ? (
-          <>
-            <ShoppingCart className="w-5 h-5 mr-2" />
-            Удалить из корзины
-          </>
-        ) : (
-          <>
-            <ShoppingCart className="w-5 h-5 mr-2" />
-            Добавить в корзину
-          </>
-        )}
-      </button>
+      {product.quantity === 0 ? (
+        <button
+          className="flex items-center justify-center w-full bg-gray-400 text-white font-medium py-2 px-4 rounded-md shadow-sm cursor-not-allowed mt-4"
+          disabled
+        >
+          Нет в наличии
+        </button>
+      ) : (
+        <button
+          className="flex items-center justify-center w-full bg-green-600 hover:bg-green-800 text-white font-medium py-2 px-4 rounded-md shadow-sm transition mt-4"
+          onClick={handleButtonClick}
+        >
+          {isInBasket ? (
+            <>
+              <ShoppingCart className="w-5 h-5 mr-2" />
+              Удалить из корзины
+            </>
+          ) : (
+            <>
+              <ShoppingCart className="w-5 h-5 mr-2" />
+              Добавить в корзину
+            </>
+          )}
+        </button>
+      )}
     </div>
   );
 });

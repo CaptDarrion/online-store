@@ -80,6 +80,7 @@ export default class ProductStore {
     try {
       const response = await BasketService.fetchBasket();
       this.basketItems = response.data;
+      console.log(response.data);
     } catch (e) {
       console.error("Ошибка загрузки корзины:", e);
     }
@@ -102,6 +103,33 @@ export default class ProductStore {
       console.error("Ошибка удаления из корзины:", e);
     }
   }
+
+  async increaseQuantity(item) {
+    try {
+      const newQty = item.basket.quantity + 1;
+      const response = await BasketService.updateBasketItem(item.id, newQty);
+      item.basket.quantity = response.data.quantity;
+      await this.loadBasket();
+    } catch (e) {
+      console.error("Ошибка увеличения количества:", e);
+    }
+  }
+
+  async decreaseQuantity(item) {
+    try {
+      if (item.basket.quantity > 1) {
+        const newQty = item.basket.quantity - 1;
+        const response = await BasketService.updateBasketItem(item.id, newQty);
+        item.basket.quantity = response.data.quantity;
+        await this.loadBasket();
+      } else {
+        await this.removeFromBasket(item.id);
+      }
+    } catch (e) {
+      console.error("Ошибка уменьшения количества:", e);
+    }
+  }
+
   isItemInBasket(itemId) {
     return this.basketItems.some((item) => item.id === itemId);
   }

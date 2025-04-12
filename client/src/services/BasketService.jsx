@@ -5,11 +5,15 @@ export default class BasketService {
     return $api.get("/basket/");
   }
 
-  static async addToBasket(productId) {
-    return $api.post("/basket/", { productId });
+  static async addToBasket(productId, amount = 1) {
+    return $api.post("/basket/", { productId, amount });
   }
 
   static async removeFromBasket(productId) {
     return $api.delete("/basket/", { data: { productId } });
+  }
+
+  static async updateBasketItem(productId, newQuantity) {
+    return $api.put("/basket/", { productId, newQuantity });
   }
 }

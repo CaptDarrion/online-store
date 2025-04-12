@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import AppRouter from "./components/AppRouter";
 import { BrowserRouter } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 import { useContext, useEffect } from "react";
 import { Context } from "./main";
 
@@ -27,6 +28,7 @@ const App = observer(() => {
     <BrowserRouter>
       <NavBar />
       <AppRouter />
+      <Footer />
     </BrowserRouter>
   );
 });

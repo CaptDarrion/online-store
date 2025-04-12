@@ -1,10 +1,11 @@
 const Router = require("express");
 const router = new Router();
-const basketController = require("../controllers/basketController")
-const authMiddleware = require("../middleware/authMiddleware")
+const basketController = require("../controllers/basketController");
+const authMiddleware = require("../middleware/authMiddleware");
 
-router.get("/", authMiddleware, basketController.getWishlist);
+router.get("/", authMiddleware, basketController.getBasket);
 router.post("/", authMiddleware, basketController.addToBasket);
-router.delete("/", authMiddleware, basketController.removeFromWishlist);
+router.put("/", authMiddleware, basketController.updateBasketItem);
+router.delete("/", authMiddleware, basketController.removeFromBasket);
 
-module.exports = router
+module.exports = router;

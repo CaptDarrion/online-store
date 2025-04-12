@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useContext, useEffect } from "react";
 import { Context } from "../main";
-import ProductItem from "../components/ProductItem";
+import BasketItem from "../components/BasketItem";
 
 const Basket = observer(() => {
   const { product } = useContext(Context);
@@ -30,7 +30,7 @@ const Basket = observer(() => {
         {product.basketItems.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {product.basketItems.map((item) => (
-              <ProductItem key={item.id} product={item} />
+              <BasketItem key={item.id} product={item} />
             ))}
           </div>
         ) : (

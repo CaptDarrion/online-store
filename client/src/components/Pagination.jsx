@@ -1,25 +1,44 @@
-
 import { useContext } from "react";
 import { Context } from "../main";
 import { observer } from "mobx-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Pagination = observer(() => {
   const { product } = useContext(Context);
 
   return (
-    <div className="flex justify-center gap-2 mt-4">
+    <div className="flex items-center justify-center gap-6 mt-6">
       <button
         onClick={() => product.prevPage()}
         disabled={product.page === 1}
+        className={`flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-200 
+          ${
+            product.page === 1
+              ? "bg-green-400 text-green-600 cursor-not-allowed"
+              : "bg-green-600 text-white hover:bg-green-800"
+          }`}
       >
-        Назад
+        <ChevronLeft size={20} />
       </button>
-      <span className="px-4 py-2">{product.page} / {product.totalPages}</span>
+
+      <div className="text-center">
+        <span className="block text-xl font-bold text-green-800">
+          {product.page}
+        </span>
+        <span className="text-sm text-green-600">из {product.totalPages}</span>
+      </div>
+
       <button
         onClick={() => product.nextPage()}
         disabled={product.page >= product.totalPages}
+        className={`flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-200 
+          ${
+            product.page >= product.totalPages
+              ? "bg-green-400 text-green-600 cursor-not-allowed"
+              : "bg-green-600 text-white hover:bg-green-800"
+          }`}
       >
-        Вперед
+        <ChevronRight size={20} />
       </button>
     </div>
   );
