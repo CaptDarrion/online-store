@@ -87,7 +87,7 @@ const ProductManagement = observer(() => {
       setName("");
       setPrice("");
       setQuantity("");
-      setFile(null);
+      setFile("");
       setBrand("");
       setCategory("");
       setSubcategory("");
