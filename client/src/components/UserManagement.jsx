@@ -102,23 +102,23 @@ const UserManagement = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Управление пользователями</h2>
+      <h2 className="text-2xl font-bold mb-6">Керування користувачами</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
         {/* Загрузка пользователей */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-green-600">
-          <h3 className="font-semibold mb-4">Загрузить пользователей</h3>
+          <h3 className="font-semibold mb-4">Завантажити користувачів</h3>
           <button
             onClick={fetchUsersHandler}
             className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-800"
           >
-            Загрузить
+            Завантажити
           </button>
         </div>
 
         {/* Удаление пользователя */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-red-600">
-          <h3 className="font-semibold mb-4">Удалить пользователя по email</h3>
+          <h3 className="font-semibold mb-4">Видалити користувача за email</h3>
           <input
             type="email"
             value={deleteEmail}
@@ -130,7 +130,7 @@ const UserManagement = () => {
             onClick={deleteUserByEmail}
             className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-800"
           >
-            Удалить
+            Видалити
           </button>
           {deleteError && (
             <div className="text-red-600 mt-2">{deleteError}</div>
@@ -139,7 +139,7 @@ const UserManagement = () => {
 
         {/* Список пользователей */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-green-600">
-          <h3 className="font-semibold mb-4">Список пользователей</h3>
+          <h3 className="font-semibold mb-4">Список користувачів</h3>
           {users.length > 0 ? (
             <ul className="space-y-2 max-h-60 overflow-auto">
               {users.map((user) => (
@@ -152,30 +152,30 @@ const UserManagement = () => {
                     onClick={() => openModal(user.email)}
                     className="mt-2 bg-red-600 text-white px-2 py-1 rounded hover:bg-red-800"
                   >
-                    Удалить
+                    Видалити
                   </button>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-gray-600">Пользователи не загружены</p>
+            <p className="text-gray-600">Користувачі не завантажені</p>
           )}
         </div>
 
         {/* Загрузка админов */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-blue-600">
-          <h3 className="font-semibold mb-4">Загрузить администраторов</h3>
+          <h3 className="font-semibold mb-4">Завантажити адміністраторів</h3>
           <button
             onClick={fetchAdminsHandler}
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-800"
           >
-            Загрузить
+            Завантажити
           </button>
         </div>
 
         {/* Список админов */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-blue-600">
-          <h3 className="font-semibold mb-4">Список администраторов</h3>
+          <h3 className="font-semibold mb-4">Список адміністраторів</h3>
           {admins.length > 0 ? (
             <ul className="space-y-2 max-h-60 overflow-auto">
               {admins.map((admin) => (
@@ -188,13 +188,13 @@ const UserManagement = () => {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-600">Администраторы не загружены</p>
+            <p className="text-gray-600">Адміністратори не завантажені</p>
           )}
         </div>
 
         {/* Создание пользователя */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-blue-600">
-          <h3 className="font-semibold mb-4">Создать пользователя</h3>
+          <h3 className="font-semibold mb-4">Створити користувача</h3>
           <input
             type="email"
             placeholder="Email"
@@ -214,14 +214,14 @@ const UserManagement = () => {
             onChange={(e) => setRole(e.target.value)}
             className="w-full p-2 border rounded mb-4"
           >
-            <option value="USER">Пользователь</option>
-            <option value="ADMIN">Администратор</option>
+            <option value="USER">Користувач</option>
+            <option value="ADMIN">Адміністратор</option>
           </select>
           <button
             onClick={createUserHandler}
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-800"
           >
-            Создать пользователя
+            Створити користувача
           </button>
           {createUserError && (
             <div className="text-red-600 mt-2">{createUserError}</div>
@@ -233,9 +233,9 @@ const UserManagement = () => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-30">
           <div className="bg-white p-6 rounded shadow-lg w-96 border border-red-900">
-            <h3 className="font-semibold mb-4">Подтвердите удаление</h3>
+            <h3 className="font-semibold mb-4">Підтвердьте видалення</h3>
             <p>
-              Вы уверены, что хотите удалить пользователя{" "}
+              Ви впевнені, що хочете видалити користувача{" "}
               <strong>{deleteEmail}</strong>?
             </p>
             <div className="flex justify-end mt-6 gap-2">
@@ -243,13 +243,13 @@ const UserManagement = () => {
                 onClick={deleteUserHandler}
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
               >
-                Удалить
+                Видалити
               </button>
               <button
                 onClick={closeModal}
                 className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-500"
               >
-                Отмена
+                Скасувати
               </button>
             </div>
           </div>

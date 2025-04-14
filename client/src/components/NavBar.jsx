@@ -8,7 +8,7 @@ import {
   BLOG_ROUTE,
   BRAND_ROUTE,
   CONTACTS_ROUTE,
-  HOME_ROUTE,
+  // HOME_ROUTE,
   LOGIN_ROUTE,
   PRODUCT_ROUTE,
   SHOP_ROUTE,
@@ -25,6 +25,7 @@ import {
   UserCog,
   LogIn,
   LogOut,
+  User,
 } from "lucide-react";
 
 const NavBar = observer(() => {
@@ -145,14 +146,14 @@ const NavBar = observer(() => {
       <div className="bg-black p-4 flex flex-col md:flex-row justify-between items-center">
         {/* Навігаційні посилання */}
         <ul className="flex flex-wrap justify-center md:justify-start space-x-6 md:space-x-8 mb-4 md:mb-0">
-          <li>
+          {/* <li>
             <NavLink
               to={HOME_ROUTE}
               className="text-gray-200 hover:text-green-400 transition-colors"
             >
               Головна
             </NavLink>
-          </li>
+          </li> */}
           <li>
             <NavLink
               to={SHOP_ROUTE}
@@ -211,7 +212,7 @@ const NavBar = observer(() => {
                 onClick={() => navigate(BASKET_ROUTE)}
               >
                 <ShoppingBasket className="w-5 h-5 mr-2" />
-                Корзина
+                Кошик
               </button>
               <button
                 className="flex items-center px-4 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
@@ -221,11 +222,11 @@ const NavBar = observer(() => {
                 Обране
               </button>
               <button
-                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-red-700 transition-colors"
                 onClick={() => navigate(USER_PROFILE_ROUTE)}
               >
-                <LogOut className="w-5 h-5 mr-2" />
-                Профиль
+                <User className="w-5 h-5 mr-2" />
+                Профіль
               </button>
               {user.role === "ADMIN" && (
                 <button

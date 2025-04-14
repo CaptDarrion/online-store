@@ -11,7 +11,7 @@ const UserBar = ({ onSelect }) => {
         className="flex items-center justify-between md:hidden bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg mb-2 w-full"
         onClick={() => setSidebarOpen(!isSidebarOpen)}
       >
-        <span>Панель пользователями</span>
+        <span>Панель користувача</span>
         <Menu size={20} />
       </button>
 
@@ -21,20 +21,20 @@ const UserBar = ({ onSelect }) => {
       w-full md:min-w-[240px] md:max-w-[240px] md:h-auto`}
       >
         <h2 className="text-lg font-bold mb-3 text-gray-800">
-          Панель пользователями
+          Панель користувача
         </h2>
         <div className="space-y-2">
           <div
             className="cursor-pointer text-gray-800 hover:bg-gray-100 p-2 rounded-lg transition border-b border-gray-300"
             onClick={() => onSelect("personalInformation")}
           >
-            Управление личными данными
+            Керування особистими даними
           </div>
           <div
             className="cursor-pointer text-gray-800 hover:bg-gray-100 p-2 rounded-lg transition border-b border-gray-300"
             onClick={() => onSelect("orderInformation")}
           >
-            Информация о заказах
+            Інформація про замовлення
           </div>
         </div>
       </div>

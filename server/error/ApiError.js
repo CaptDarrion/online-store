@@ -14,11 +14,11 @@ class ApiError extends Error {
   }
 
   static forbiden(message, errors = []) {
-    return new ApiError(403, 'Немає доступу');
+    return new ApiError(403, "Немає доступу");
   }
 
   static unathorizedError() {
-    return new ApiError(401, 'Користувач неавторизований')
+    return new ApiError(401, "Користувач неавторизований");
   }
 }
 

@@ -3,10 +3,14 @@ import { useParams } from "react-router-dom";
 import ProductService from "../services/ProductService";
 import WishlistService from "../services/WishlistService";
 import BasketService from "../services/BasketService";
+import CategoryService from "../services/CategoryService";
+import BrandService from "../services/BrandService";
 import { Heart, HeartOff, ShoppingCart } from "lucide-react";
 
 const ProductPage = () => {
   const [product, setProduct] = useState({ info: [] });
+  const [category, setCategory] = useState(null);
+  const [brand, setBrand] = useState(null);
   const [activeTab, setActiveTab] = useState("characteristics");
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [isInBasket, setIsInBasket] = useState(false);
@@ -17,8 +21,19 @@ const ProductPage = () => {
       try {
         const response = await ProductService.fetchOneProduct(id);
         setProduct(response.data);
+
+        const { brandId, categoryId } = response.data;
+        const [categoryResponse, brandResponse] = await Promise.all([
+          CategoryService.fetchOneCategory(categoryId),
+          BrandService.fetchOneBrand(brandId),
+        ]);
+        setCategory(categoryResponse.data);
+        setBrand(brandResponse.data);
       } catch (e) {
-        console.error("Ошибка при загрузке товара:", e);
+        console.error(
+          "Помилка при завантаженні товару або даних бренду/категорії:",
+          e
+        );
       }
     };
 
@@ -27,7 +42,7 @@ const ProductPage = () => {
         const { data } = await WishlistService.fetchWishlist();
         setIsInWishlist(data.some((item) => item.id === Number(id)));
       } catch (error) {
-        console.error("Ошибка при проверке вишлиста:", error);
+        console.error("Помилка при перевірці списку бажаного:", error);
       }
     };
 
@@ -36,7 +51,7 @@ const ProductPage = () => {
         const { data } = await BasketService.fetchBasket();
         setIsInBasket(data.some((item) => item.id === Number(id)));
       } catch (error) {
-        console.error("Ошибка при проверке корзины:", error);
+        console.error("Помилка при перевірці кошика:", error);
       }
     };
 
@@ -54,7 +69,7 @@ const ProductPage = () => {
       }
       setIsInWishlist(!isInWishlist);
     } catch (error) {
-      console.error("Ошибка при обновлении вишлиста:", error);
+      console.error("Помилка при оновленні списку бажаного:", error);
     }
   };
 
@@ -67,30 +82,35 @@ const ProductPage = () => {
       }
       setIsInBasket(!isInBasket);
     } catch (error) {
-      console.error("Ошибка при обновлении корзины:", error);
+      console.error("Помилка при оновленні кошика:", error);
     }
   };
 
   if (!product || !product.name) {
     return (
       <div className="flex justify-center items-center h-screen text-xl font-semibold text-gray-600">
-        Загрузка...
+        Завантаження...
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      {/* Основной контейнер */}
       <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8">
-        {/* Заголовок товара */}
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">
           {product.name}
         </h1>
 
-        {/* Верхняя часть: изображение + информация о товаре */}
+        {/* Відображення категорії та бренду */}
+        <div className="mb-4 text-sm text-gray-500">
+          <p>
+            Категорія:{" "}
+            {category ? category.name : product.categoryId || "Не вказана"}
+          </p>
+          <p>Бренд: {brand ? brand.name : product.brandId || "Не вказаний"}</p>
+        </div>
+
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Главное изображение */}
           <div className="md:w-2/3 flex items-center justify-center">
             {product.img ? (
               <img
@@ -100,14 +120,12 @@ const ProductPage = () => {
               />
             ) : (
               <div className="text-gray-500 text-center h-96 flex items-center justify-center w-full bg-gray-100 rounded-lg">
-                Изображение не доступно
+                Зображення недоступне
               </div>
             )}
           </div>
 
-          {/* Информация о товаре */}
           <div className="md:w-1/3 flex flex-col space-y-6">
-            {/* Цена и кнопка */}
             <div className="p-4 bg-gray-50 rounded-lg shadow-sm">
               <p className="text-3xl font-bold text-gray-800 mb-3">
                 {product.price} грн
@@ -118,10 +136,9 @@ const ProductPage = () => {
                 }`}
               >
                 {product.quantity === 0
-                  ? "Нет в наличии"
-                  : `В наличии ${product.quantity}`}
+                  ? "Немає в наявності"
+                  : `В наявності ${product.quantity}`}
               </p>
-              {/* Кнопка добавления в корзину */}
               <button
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 text-lg font-medium"
                 onClick={toggleBasket}
@@ -138,8 +155,6 @@ const ProductPage = () => {
                   </>
                 )}
               </button>
-
-              {/* Кнопка добавления в список желаемого */}
               <button
                 className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 text-lg font-medium mt-3"
                 onClick={toggleWishlist}
@@ -158,37 +173,33 @@ const ProductPage = () => {
               </button>
             </div>
 
-            {/* Доставка */}
             <div className="p-4 bg-gray-50 rounded-lg shadow-sm text-sm text-gray-700">
               <p className="font-semibold mb-2 text-gray-800">Доставка</p>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Самовывоз по адресу Приморська-12, Одеса, Україна</li>
-                <li>Доставка курьером по Одессе</li>
-                <li>Отправка Новой Почтой</li>
+                <li>Самовивіз за адресою Приморська-12, Одеса, Україна</li>
+                <li>Доставка кур’єром по Одесі</li>
+                <li>Відправлення Новою Поштою</li>
               </ul>
             </div>
 
-            {/* Оплата */}
             <div className="p-4 bg-gray-50 rounded-lg shadow-sm text-sm text-gray-700">
               <p className="font-semibold mb-2 text-gray-800">Оплата</p>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Наличными при получении</li>
-                <li>Картой Visa/MasterCard</li>
+                <li>Готівкою при отриманні</li>
+                <li>Карткою Visa/MasterCard</li>
               </ul>
             </div>
 
-            {/* Гарантия */}
             <div className="p-4 bg-gray-50 rounded-lg shadow-sm text-sm text-gray-700">
-              <p className="font-semibold mb-2 text-gray-800">Гарантия</p>
+              <p className="font-semibold mb-2 text-gray-800">Гарантія</p>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Официальная гарантия от производителя</li>
-                <li>Возврат/обмен в течение 30 дней</li>
+                <li>Офіційна гарантія від виробника</li>
+                <li>Повернення/обмін протягом 30 днів</li>
               </ul>
             </div>
           </div>
         </div>
 
-        {/* Табы: Характеристики и Отзывы */}
         <div className="mt-10">
           <div className="border-b border-gray-200 mb-6">
             <nav className="-mb-px flex space-x-8">
@@ -210,12 +221,11 @@ const ProductPage = () => {
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
               >
-                Отзывы
+                Відгуки
               </button>
             </nav>
           </div>
 
-          {/* Содержимое табов */}
           <div className="mt-4">
             {activeTab === "characteristics" && (
               <div>
@@ -237,7 +247,7 @@ const ProductPage = () => {
                   </div>
                 ) : (
                   <p className="text-gray-600">
-                    Нет характеристик для этого товара
+                    Немає характеристик для цього товару
                   </p>
                 )}
               </div>
@@ -245,7 +255,7 @@ const ProductPage = () => {
 
             {activeTab === "reviews" && (
               <div>
-                <p className="text-gray-600">Отзывов пока нет</p>
+                <p className="text-gray-600">Відгуків поки немає</p>
               </div>
             )}
           </div>

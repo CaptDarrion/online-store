@@ -57,7 +57,7 @@ const ProductItem = observer(({ product }) => {
       <h3 className="text-sm font-medium text-gray-800 mb-2 truncate">
         {product.name}
       </h3>
-      <p className="text-xs text-gray-500 mb-1">Код товара: {product.id}</p>
+      <p className="text-xs text-gray-500 mb-1">Код товару: {product.id}</p>
       <p className="text-gray-600 text-base font-semibold mb-1">
         {product.price} грн
       </p>
@@ -67,8 +67,8 @@ const ProductItem = observer(({ product }) => {
         }`}
       >
         {product.quantity === 0
-          ? "Нет в наличии"
-          : `В наличии ${product.quantity}`}
+          ? "Нємає в наявності"
+          : `В наявності ${product.quantity}`}
       </p>
 
       <div className="flex items-center text-yellow-400 text-xs mb-3">
@@ -88,7 +88,7 @@ const ProductItem = observer(({ product }) => {
           className="flex items-center justify-center w-full bg-gray-400 text-white font-medium py-2 px-4 rounded-md shadow-sm cursor-not-allowed mt-4"
           disabled
         >
-          Нет в наличии
+          Немає в наявності
         </button>
       ) : (
         <button
@@ -98,12 +98,12 @@ const ProductItem = observer(({ product }) => {
           {isInBasket ? (
             <>
               <ShoppingCart className="w-5 h-5 mr-2" />
-              Удалить из корзины
+              Видалити з кошика
             </>
           ) : (
             <>
               <ShoppingCart className="w-5 h-5 mr-2" />
-              Добавить в корзину
+              Додати до кошика
             </>
           )}
         </button>

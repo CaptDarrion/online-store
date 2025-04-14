@@ -18,7 +18,9 @@ const BrandManagement = observer(() => {
       setCreateError("");
       setNewBrand("");
     } catch (e) {
-      setCreateError(e.response?.data?.message || "Ошибка при создании бренда");
+      setCreateError(
+        e.response?.data?.message || "Помилка при створенні бренду"
+      );
     }
   };
 
@@ -29,7 +31,7 @@ const BrandManagement = observer(() => {
 
   const deleteBrand = async () => {
     if (!deleteBrandName) {
-      setDeleteError("Название бренда не может быть пустым");
+      setDeleteError("Назва бренду не може бути порожньою");
       return;
     }
     try {
@@ -37,7 +39,9 @@ const BrandManagement = observer(() => {
       product.removeBrandByName(deleteBrandName);
       setDeleteError("");
     } catch (e) {
-      setDeleteError(e.response?.data?.message || "Ошибка при удалении бренда");
+      setDeleteError(
+        e.response?.data?.message || "Помилка при видаленні бренду"
+      );
     } finally {
       setIsModalOpen(false);
       setDeleteBrandName("");
@@ -50,7 +54,7 @@ const BrandManagement = observer(() => {
         const res = await BrandService.fetchBrands();
         product.setBrands(res.data);
       } catch (e) {
-        console.error("Ошибка при загрузке брендов:", e);
+        console.error("Помилка при завантаженні брендів:", e);
       }
     };
     fetchBrands();
@@ -59,18 +63,18 @@ const BrandManagement = observer(() => {
   return (
     <div className="flex flex-col items-start justify-start min-h-screen p-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
-        Управление брендами
+        Керування брендами
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-        {/* Создание */}
+        {/* Створення */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-gray-300">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Создать бренд
+            Створити бренд
           </h3>
           <input
             type="text"
-            placeholder="Название бренда"
+            placeholder="Назва бренду"
             value={newBrand}
             onChange={(e) => setNewBrand(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded mb-4"
@@ -79,7 +83,7 @@ const BrandManagement = observer(() => {
             onClick={createBrand}
             className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-800 transition"
           >
-            Создать
+            Створити
           </button>
           {createError && (
             <div className="mt-4 text-red-600">{createError}</div>
@@ -89,7 +93,7 @@ const BrandManagement = observer(() => {
         {/* Список */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-gray-300">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Список брендов
+            Список брендів
           </h3>
           {product.brands.length > 0 ? (
             <ul className="space-y-2 max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-200 pr-2">
@@ -103,24 +107,24 @@ const BrandManagement = observer(() => {
                     onClick={() => confirmDelete(b.name)}
                     className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-800 transition"
                   >
-                    Удалить
+                    Видалити
                   </button>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-gray-600 text-sm mt-2">Нет брендов</p>
+            <p className="text-gray-600 text-sm mt-2">Немає брендів</p>
           )}
         </div>
 
-        {/* Удаление вручную */}
+        {/* Ручне видалення */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-gray-300">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Удалить бренд по названию
+            Видалити бренд за назвою
           </h3>
           <input
             type="text"
-            placeholder="Введите название бренда"
+            placeholder="Введіть назву бренду"
             value={deleteBrandName}
             onChange={(e) => setDeleteBrandName(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded mb-4"
@@ -129,7 +133,7 @@ const BrandManagement = observer(() => {
             onClick={deleteBrand}
             className="w-full bg-red-600 text-white p-2 rounded hover:bg-red-800 transition"
           >
-            Удалить
+            Видалити
           </button>
           {deleteError && (
             <div className="mt-4 text-red-600">{deleteError}</div>
@@ -137,15 +141,15 @@ const BrandManagement = observer(() => {
         </div>
       </div>
 
-      {/* Модалка */}
+      {/* Модальне вікно */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 border border-red-900">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Подтвердите удаление
+              Підтвердження видалення
             </h3>
             <p>
-              Вы уверены, что хотите удалить бренд{" "}
+              Ви впевнені, що хочете видалити бренд{" "}
               <strong>{deleteBrandName}</strong>?
             </p>
             <div className="flex justify-between mt-6">
@@ -153,13 +157,13 @@ const BrandManagement = observer(() => {
                 onClick={deleteBrand}
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800 transition"
               >
-                Удалить
+                Видалити
               </button>
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="bg-gray-300 px-4 py-2 rounded text-gray-800 hover:bg-gray-500 transition"
               >
-                Отмена
+                Скасувати
               </button>
             </div>
           </div>

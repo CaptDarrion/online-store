@@ -3,7 +3,8 @@ import AdminBar from "../components/AdminBar";
 import UserManagement from "../components/UserManagement";
 import BrandManagement from "../components/BrandManagement";
 import CategoryManagement from "../components/CategoryManagement";
-import ProductManagement from "../components/ProductManagement"
+import ProductManagement from "../components/ProductManagement";
+import AdminOrderManagement from "../components/AdminOrderManagement";
 
 const AdminPage = () => {
   const [selectedSection, setSelectedSection] = useState(null);
@@ -15,7 +16,8 @@ const AdminPage = () => {
         {selectedSection === "users" && <UserManagement />}
         {selectedSection === "brands" && <BrandManagement />}
         {selectedSection === "categories" && <CategoryManagement />}
-        {selectedSection == "products" && <ProductManagement />}
+        {selectedSection === "products" && <ProductManagement />}
+        {selectedSection === "orders" && <AdminOrderManagement />}
       </div>
     </div>
   );

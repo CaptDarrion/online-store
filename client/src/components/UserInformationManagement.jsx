@@ -11,7 +11,7 @@ const UserInformationManagement = observer(() => {
       try {
         await user.fetchProfile();
       } catch (error) {
-        console.error("Ошибка загрузки профиля:", error);
+        console.error("Помилка завантаження профілю:", error);
       }
     };
     loadProfile();
@@ -30,67 +30,69 @@ const UserInformationManagement = observer(() => {
         user.profile.lastName,
         user.profile.phone
       );
-      setMessage("Данные успешно обновлены");
+      setMessage("Дані успішно оновлено");
     } catch (error) {
-      setMessage("Ошибка обновления данных");
-      console.error("Ошибка обновления профиля:", error);
+      setMessage("Помилка оновлення даних");
+      console.error("Помилка оновлення профілю:", error);
     }
   };
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Управление личной информацией</h2>
+      <h2 className="text-2xl font-bold mb-6">
+        Керування особистою інформацією
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-        {/* Карточка с текущей информацией */}
+        {/* Картка з поточною інформацією */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-blue-600">
-          <h3 className="font-semibold mb-4">Мои данные</h3>
+          <h3 className="font-semibold mb-4">Мої дані</h3>
           <div className="space-y-2">
             <p>
-              <strong>Имя:</strong> {user.profile.firstName || "Не указано"}
+              <strong>Ім’я:</strong> {user.profile.firstName || "Не вказано"}
             </p>
             <p>
-              <strong>Фамилия:</strong> {user.profile.lastName || "Не указано"}
+              <strong>Прізвище:</strong> {user.profile.lastName || "Не вказано"}
             </p>
             <p>
-              <strong>Телефон:</strong> {user.profile.phone || "Не указан"}
+              <strong>Телефон:</strong> {user.profile.phone || "Не вказано"}
             </p>
             <p>
-              <strong>Email:</strong> {user.user?.email || "Не указан"}
+              <strong>Email:</strong> {user.user?.email || "Не вказано"}
             </p>
             <p>
-              <strong>Дата регистрации:</strong>{" "}
+              <strong>Дата реєстрації:</strong>{" "}
               {user.user?.createdAt &&
                 new Date(user.user.createdAt).toLocaleDateString("uk-UA")}
             </p>
             <p>
-              <strong>Статус подтверждения почты:</strong>{" "}
-              {user.user?.isActivated ? "Подтвержден" : "Не подтвержден"}
+              <strong>Підтвердження пошти:</strong>{" "}
+              {user.user?.isActivated ? "Підтверджено" : "Не підтверджено"}
             </p>
           </div>
         </div>
 
-        {/* Форма для обновления данных */}
+        {/* Форма для оновлення даних */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-green-600">
-          <h3 className="font-semibold mb-4">Обновить данные</h3>
+          <h3 className="font-semibold mb-4">Оновити дані</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-gray-700">Имя</label>
+              <label className="block text-gray-700">Ім’я</label>
               <input
                 type="text"
                 value={user.profile.firstName || ""}
                 onChange={(e) => handleChange("firstName", e.target.value)}
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Введите имя"
+                placeholder="Введіть ім’я"
               />
             </div>
             <div>
-              <label className="block text-gray-700">Фамилия</label>
+              <label className="block text-gray-700">Прізвище</label>
               <input
                 type="text"
                 value={user.profile.lastName || ""}
                 onChange={(e) => handleChange("lastName", e.target.value)}
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Введите фамилию"
+                placeholder="Введіть прізвище"
               />
             </div>
             <div>
@@ -100,14 +102,14 @@ const UserInformationManagement = observer(() => {
                 value={user.profile.phone || ""}
                 onChange={(e) => handleChange("phone", e.target.value)}
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Введите номер телефона"
+                placeholder="Введіть номер телефону"
               />
             </div>
             <button
               type="submit"
               className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-800 transition duration-200"
             >
-              Сохранить изменения
+              Зберегти зміни
             </button>
           </form>
           {message && (

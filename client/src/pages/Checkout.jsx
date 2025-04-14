@@ -70,7 +70,7 @@ const Checkout = observer(({ onClose }) => {
     <div className="fixed inset-0 bg-gray-200 bg-opacity-50 flex justify-center items-start pt-16 z-50">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-4xl overflow-hidden">
         <div className="flex justify-between items-center px-6 py-4 border-b">
-          <h2 className="text-2xl font-semibold">Оформление заказа</h2>
+          <h2 className="text-2xl font-semibold">Оформлення замовлення</h2>
           <button
             onClick={onClose}
             className="p-2 rounded-full hover:bg-gray-100"
@@ -81,10 +81,10 @@ const Checkout = observer(({ onClose }) => {
 
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/2 p-6 border-r">
-            <h3 className="font-medium text-lg mb-4">Данные для доставки</h3>
+            <h3 className="font-medium text-lg mb-4">Дані для доставки</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-gray-700 mb-1">Имя</label>
+                <label className="block text-gray-700 mb-1">Ім&apos;я</label>
                 <input
                   name="firstName"
                   value={form.firstName}
@@ -94,7 +94,7 @@ const Checkout = observer(({ onClose }) => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 mb-1">Фамилия</label>
+                <label className="block text-gray-700 mb-1">Прізвище</label>
                 <input
                   name="lastName"
                   value={form.lastName}
@@ -113,7 +113,7 @@ const Checkout = observer(({ onClose }) => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 mb-1">Адрес</label>
+                <label className="block text-gray-700 mb-1">Адреса</label>
                 <input
                   name="address"
                   value={form.address}
@@ -134,7 +134,7 @@ const Checkout = observer(({ onClose }) => {
                       onChange={handleChange}
                       className="mr-2"
                     />
-                    Картой
+                    Карткою
                   </label>
                   <label className="flex items-center">
                     <input
@@ -145,7 +145,7 @@ const Checkout = observer(({ onClose }) => {
                       onChange={handleChange}
                       className="mr-2"
                     />
-                    При получении
+                    Під час отримання
                   </label>
                 </div>
               </div>
@@ -154,13 +154,13 @@ const Checkout = observer(({ onClose }) => {
                 disabled={submitting}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition"
               >
-                {submitting ? "Оформляем..." : "Подтвердить заказ"}
+                {submitting ? "Оформлюємо..." : "Підтвердити замовлення"}
               </button>
             </form>
           </div>
 
           <div className="md:w-1/2 p-6">
-            <h3 className="font-medium text-lg mb-4">Ваш заказ</h3>
+            <h3 className="font-medium text-lg mb-4">Ваше замовлення</h3>
             <div className="space-y-4 max-h-[400px] overflow-y-auto">
               {items.map((i) => (
                 <div key={i.id} className="flex items-center space-x-4">
@@ -182,7 +182,7 @@ const Checkout = observer(({ onClose }) => {
               ))}
             </div>
             <div className="border-t mt-4 pt-4 flex justify-between items-center">
-              <span className="text-lg font-medium">Итого:</span>
+              <span className="text-lg font-medium">Разом:</span>
               <span className="text-xl font-bold">{total} грн</span>
             </div>
           </div>

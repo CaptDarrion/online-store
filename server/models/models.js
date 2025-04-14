@@ -137,7 +137,11 @@ OrderItem.belongsTo(Order, { foreignKey: "orderId" });
 Product.hasMany(OrderItem);
 OrderItem.belongsTo(Product);
 
-User.hasOne(UserInfo, { foreignKey: "userId", as: "profile" });
+User.hasOne(UserInfo, {
+  foreignKey: "userId",
+  as: "profile",
+  onDelete: "CASCADE",
+});
 UserInfo.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 User.hasMany(Rating);
@@ -172,7 +176,7 @@ Product.belongsToMany(User, {
 Product.hasMany(Rating);
 Rating.belongsTo(Product);
 
-Product.hasMany(ProductInfo, { as: "info" });
+Product.hasMany(ProductInfo, { as: "info", onDelete: "CASCADE" });
 ProductInfo.belongsTo(Product);
 
 Category.hasMany(Product, { onDelete: "CASCADE" });

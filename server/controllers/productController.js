@@ -79,6 +79,10 @@ class ProductController {
 
   async getOne(req, res) {
     const { id } = req.params;
+
+    if (!id || id === "null") {
+      return res.status(400).json();
+    }
     const product = await Product.findOne({
       where: { id },
       include: [{ model: ProductInfo, as: "info" }],

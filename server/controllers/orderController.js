@@ -53,6 +53,15 @@ class OrderController {
       next(error);
     }
   }
+
+  async getAllOrders(req, res, next) {
+    try {
+      const orders = await OrderService.getAllOrders();
+      return res.json(orders);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new OrderController();

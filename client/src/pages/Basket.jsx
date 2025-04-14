@@ -17,10 +17,10 @@ const Basket = observer(() => {
   return (
     <div className="flex flex-col md:flex-row gap-4 p-4">
       <div className="w-full md:w-1/4 lg:max-w-xs">
-        <h1 className="text-2xl font-bold mb-4">🛒 Ваша корзина</h1>
+        <h1 className="text-2xl font-bold mb-4">🛒 Ваш кошик</h1>
         <p className="text-gray-500">
-          Вы легко можете перейти к оформлению заказа для покупки данных
-          товаров.
+          Ви легко можете перейти до оформлення замовлення для купівлі цих
+          товарів
         </p>{" "}
         <br />
         {product.basketItems.length > 0 && (
@@ -28,7 +28,7 @@ const Basket = observer(() => {
             onClick={openCheckout}
             className="bg-blue-600 text-white px-4 py-2 rounded"
           >
-            Оформить заказ
+            Оформити замовлення
           </button>
         )}
       </div>
@@ -41,7 +41,7 @@ const Basket = observer(() => {
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 text-center">Корзина пуста.</p>
+          <p className="text-gray-500 text-center">Кошик порожній</p>
         )}
       </div>
 

@@ -13,9 +13,9 @@ const Wishlist = observer(() => {
   return (
     <div className="flex flex-col md:flex-row gap-4 p-4">
       <div className="w-full md:w-1/4 lg:max-w-xs">
-        <h1 className="text-2xl font-bold mb-4">💚 Избранные товары</h1>
+        <h1 className="text-2xl font-bold mb-4">💚 Обрані товари</h1>
         <p className="text-gray-500">
-          Здесь отображаются товары, которые вы добавили в избранное.
+          Тут відображаються товари, які ви додали до обраного
         </p>
       </div>
       <div className="w-full md:w-3/4">
@@ -26,7 +26,7 @@ const Wishlist = observer(() => {
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 text-center">Список избранного пуст.</p>
+          <p className="text-gray-500 text-center">Список обраного порожній</p>
         )}
       </div>
     </div>

@@ -77,6 +77,18 @@ class OrderService {
     return orders;
   }
 
+  async getAllOrders() {
+    const orders = await Order.findAll({
+      include: [
+        {
+          model: OrderItem,
+          as: "items",
+        },
+      ],
+    });
+    return orders;
+  }
+
   async getOrderById(id) {
     const order = await Order.findByPk(id, {
       include: [

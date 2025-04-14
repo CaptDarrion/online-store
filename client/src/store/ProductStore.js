@@ -61,6 +61,21 @@ export default class ProductStore {
   setPage(page) {
     this.page = page;
   }
+
+  get sortedAllProducts() {
+    return this.allProducts.slice().sort((a, b) => {
+      if (a.quantity > 0 && b.quantity === 0) return -1;
+      if (a.quantity === 0 && b.quantity > 0) return 1;
+      return 0;
+    });
+  }
+
+  get paginatedProducts() {
+    const start = (this.page - 1) * this.limit;
+    const end = start + this.limit;
+    return this.sortedAllProducts.slice(start, end);
+  }
+
   get totalPages() {
     return Math.ceil(this.totalCount / this.limit);
   }

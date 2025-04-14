@@ -127,18 +127,18 @@ const CategoryManagement = observer(() => {
   return (
     <div className="flex flex-col items-start justify-start min-h-screen p-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
-        Управление категориями
+        Керування категоріями
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-        {/* Создание */}
+        {/* Створення */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-gray-300">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Создать категорию
+            Створити категорію
           </h3>
           <input
             type="text"
-            placeholder="Название категории"
+            placeholder="Назва категорії"
             value={categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded mb-4"
@@ -149,7 +149,7 @@ const CategoryManagement = observer(() => {
             className="w-full p-2 border border-gray-300 rounded mb-4"
           >
             <option value="">
-              Выберите родительскую категорию (необязательно)
+              Виберіть батьківську категорію (необов&apos;язково)
             </option>
             {product.categories.map((category) => (
               <option key={category.id} value={category.id}>
@@ -161,7 +161,7 @@ const CategoryManagement = observer(() => {
             onClick={createCategoryHandler}
             className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-800 transition"
           >
-            Создать
+            Створити
           </button>
           {categoryCreateError && (
             <div className="mt-4 text-red-600">{categoryCreateError}</div>
@@ -171,7 +171,7 @@ const CategoryManagement = observer(() => {
         {/* Список */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-gray-300">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Список категорий
+            Список категорій
           </h3>
           <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-200 pr-2">
             {product.categories.length > 0 ? (
@@ -191,7 +191,7 @@ const CategoryManagement = observer(() => {
                         }
                         className="bg-red-600 text-white p-1 rounded hover:bg-red-800 transition"
                       >
-                        Удалить
+                        Видалити
                       </button>
                     </div>
                     {category.subcategories?.length > 0 && (
@@ -212,7 +212,7 @@ const CategoryManagement = observer(() => {
                                 }
                                 className="bg-red-600 text-white p-1 rounded hover:bg-red-800 transition"
                               >
-                                Удалить
+                                Видалити
                               </button>
                             </li>
                           ))}
@@ -224,20 +224,20 @@ const CategoryManagement = observer(() => {
               </ul>
             ) : (
               <p className="text-center text-gray-600 mt-4">
-                Категории не загружены
+                Категорії не завантажені
               </p>
             )}
           </div>
         </div>
 
-        {/* Удаление по имени */}
+        {/* Видалення по назві */}
         <div className="bg-white p-6 rounded-2xl shadow-md border w-full border-gray-300">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Удалить категорию по названию
+            Видалити категорію за назвою
           </h3>
           <input
             type="text"
-            placeholder="Введите название категории"
+            placeholder="Введіть назву категорії"
             value={deleteCategoryName}
             onChange={(e) => setDeleteCategoryName(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded mb-4"
@@ -246,7 +246,7 @@ const CategoryManagement = observer(() => {
             onClick={deleteCategoryByNameHandler}
             className="w-full bg-red-600 text-white p-2 rounded hover:bg-red-800 transition"
           >
-            Удалить
+            Видалити
           </button>
           {categoryDeleteError && (
             <div className="mt-4 text-red-600">{categoryDeleteError}</div>
@@ -259,13 +259,13 @@ const CategoryManagement = observer(() => {
         <div className="fixed inset-0 flex justify-center items-center bg-gray-200 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 border border-red-900">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Подтвердите удаление
+              Підтвердіть видалення
             </h3>
             <p>
-              Вы уверены, что хотите удалить{" "}
+              Ви впевнені, що хочете видалити{" "}
               {deleteModalData.type === "category"
-                ? "категорию"
-                : "подкатегорию"}{" "}
+                ? "категорію"
+                : "підкатегорію"}{" "}
               &quot;{deleteModalData.name}&quot;?
             </p>
             <div className="mt-4 flex justify-between">
@@ -273,13 +273,13 @@ const CategoryManagement = observer(() => {
                 onClick={confirmDeleteHandler}
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
               >
-                Удалить
+                Видалити
               </button>
               <button
                 onClick={closeDeleteModal}
                 className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-500"
               >
-                Отмена
+                Скасувати
               </button>
             </div>
           </div>
