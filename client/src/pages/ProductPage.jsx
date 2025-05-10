@@ -139,22 +139,31 @@ const ProductPage = () => {
                   ? "Немає в наявності"
                   : `В наявності ${product.quantity}`}
               </p>
-              <button
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 text-lg font-medium"
-                onClick={toggleBasket}
-              >
-                {isInBasket ? (
-                  <>
-                    <ShoppingCart className="w-5 h-5" />
-                    Видалити з кошика
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="w-5 h-5" />
-                    Додати до кошика
-                  </>
-                )}
-              </button>
+              {product.quantity === 0 ? (
+                <button
+                  className="flex items-center justify-center w-full bg-gray-400 text-white font-medium py-2 px-4 rounded-md shadow-sm cursor-not-allowed mt-4"
+                  disabled
+                >
+                  Немає в наявності
+                </button>
+              ) : (
+                <button
+                  className="flex items-center justify-center w-full bg-green-600 hover:bg-green-800 text-white font-medium py-2 px-4 rounded-md shadow-sm transition mt-4"
+                  onClick={toggleBasket}
+                >
+                  {isInBasket ? (
+                    <>
+                      <ShoppingCart className="w-5 h-5 mr-2" />
+                      Видалити з кошика
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-5 h-5 mr-2" />
+                      Додати до кошика
+                    </>
+                  )}
+                </button>
+              )}
               <button
                 className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200 text-lg font-medium mt-3"
                 onClick={toggleWishlist}

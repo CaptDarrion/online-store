@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { X } from "lucide-react";
 import { Context } from "../main";
 import OrderService from "../services/OrderService";
+import PaymentService from "../services/PaymentService";
 
 const Checkout = observer(({ onClose }) => {
   const { user, product } = useContext(Context);
@@ -34,8 +35,7 @@ const Checkout = observer(({ onClose }) => {
     price: item.price,
     qty: item.basket.quantity,
   }));
-
-  const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const totalUAH = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,23 +44,32 @@ const Checkout = observer(({ onClose }) => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const orderData = {
-        name: `${form.firstName} ${form.lastName}`.trim(),
-        phone: form.phone,
-        address: form.address,
-        paymentMethod: form.paymentMethod,
-      };
-      await OrderService.createOrder(
-        orderData,
-        items.map((i) => ({
-          productId: i.id,
-          quantity: i.qty,
-        }))
+      // 1) Создаём заказ в БД, получаем orderId
+      const orderResp = await OrderService.createOrder(
+        {
+          name: `${form.firstName} ${form.lastName}`.trim(),
+          phone: form.phone,
+          address: form.address,
+          paymentMethod: form.paymentMethod,
+        },
+        items.map((i) => ({ productId: i.id, quantity: i.qty }))
       );
-      items.forEach((i) => product.removeFromBasket(i.id));
-      onClose();
+      const orderId = orderResp.data.id;
+
+      if (form.paymentMethod === "card") {
+        // 2) В случае оплаты картой редиректим в Stripe
+        const checkoutUrl = await PaymentService.createStripeSession(
+          orderId,
+          totalUAH
+        );
+        window.location.href = checkoutUrl;
+      } else {
+        // 3) Иначе — подтверждаем заказ и закрываем окно
+        onClose();
+      }
     } catch (err) {
       console.error(err.response?.data || err.message);
+      alert(err.response?.data?.error || err.message);
     } finally {
       setSubmitting(false);
     }
@@ -80,6 +89,7 @@ const Checkout = observer(({ onClose }) => {
         </div>
 
         <div className="flex flex-col md:flex-row">
+          {/* Форма с личными данными */}
           <div className="md:w-1/2 p-6 border-r">
             <h3 className="font-medium text-lg mb-4">Дані для доставки</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -93,6 +103,7 @@ const Checkout = observer(({ onClose }) => {
                   className="w-full border rounded-lg px-3 py-2 focus:ring focus:border-green-300"
                 />
               </div>
+
               <div>
                 <label className="block text-gray-700 mb-1">Прізвище</label>
                 <input
@@ -102,6 +113,7 @@ const Checkout = observer(({ onClose }) => {
                   className="w-full border rounded-lg px-3 py-2 focus:ring focus:border-green-300"
                 />
               </div>
+
               <div>
                 <label className="block text-gray-700 mb-1">Телефон</label>
                 <input
@@ -112,6 +124,7 @@ const Checkout = observer(({ onClose }) => {
                   className="w-full border rounded-lg px-3 py-2 focus:ring focus:border-green-300"
                 />
               </div>
+
               <div>
                 <label className="block text-gray-700 mb-1">Адреса</label>
                 <input
@@ -122,6 +135,7 @@ const Checkout = observer(({ onClose }) => {
                   className="w-full border rounded-lg px-3 py-2 focus:ring focus:border-green-300"
                 />
               </div>
+
               <div>
                 <span className="block text-gray-700 mb-1">Оплата</span>
                 <div className="flex items-center space-x-4">
@@ -149,16 +163,24 @@ const Checkout = observer(({ onClose }) => {
                   </label>
                 </div>
               </div>
+
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition"
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg"
               >
-                {submitting ? "Оформлюємо..." : "Підтвердити замовлення"}
+                {submitting
+                  ? form.paymentMethod === "card"
+                    ? "Переходимо до оплати…"
+                    : "Оформлюємо…"
+                  : form.paymentMethod === "card"
+                  ? `Оплатити ${totalUAH} грн`
+                  : "Підтвердити замовлення"}
               </button>
             </form>
           </div>
 
+          {/* Список товаров и итог */}
           <div className="md:w-1/2 p-6">
             <h3 className="font-medium text-lg mb-4">Ваше замовлення</h3>
             <div className="space-y-4 max-h-[400px] overflow-y-auto">
@@ -183,7 +205,7 @@ const Checkout = observer(({ onClose }) => {
             </div>
             <div className="border-t mt-4 pt-4 flex justify-between items-center">
               <span className="text-lg font-medium">Разом:</span>
-              <span className="text-xl font-bold">{total} грн</span>
+              <span className="text-xl font-bold">{totalUAH} грн</span>
             </div>
           </div>
         </div>
