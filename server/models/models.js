@@ -99,7 +99,11 @@ const Order = sequelize.define("order", {
   },
 
   paymentStatus: {
-    type: DataTypes.ENUM("Сплачено карткою", "Вибрано оплату при отриманні"),
+    type: DataTypes.ENUM(
+      "Очікує оплати карткою ",
+      "Сплачено карткою",
+      "Вибрано оплату при отриманні"
+    ),
     allowNull: false,
   },
   status: {

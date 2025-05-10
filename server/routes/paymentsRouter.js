@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { createSession } = require("../controllers/paymentController");
+const { createPaymentIntent } = require("../controllers/paymentController");
 
-router.post("/create-session", createSession);
+router.post("/create-payment-intent", createPaymentIntent);
 
 module.exports = router;

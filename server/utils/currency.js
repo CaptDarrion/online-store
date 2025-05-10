@@ -1,4 +1,3 @@
-// В реальном приложении лучше брать курс из API или БД
 const UAH_TO_USD = 0.027;
 
 function uahToUsdCents(amountUAH) {

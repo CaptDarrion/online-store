@@ -4,9 +4,12 @@ import { X } from "lucide-react";
 import { Context } from "../main";
 import OrderService from "../services/OrderService";
 import PaymentService from "../services/PaymentService";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
-const Checkout = observer(({ onClose }) => {
+const Checkout = observer(({ onClose, onSuccess }) => {
   const { user, product } = useContext(Context);
+  const stripe = useStripe();
+  const elements = useElements();
 
   const [form, setForm] = useState({
     firstName: "",
@@ -15,7 +18,8 @@ const Checkout = observer(({ onClose }) => {
     address: "",
     paymentMethod: "card",
   });
-  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     if (user.profile) {
@@ -37,41 +41,94 @@ const Checkout = observer(({ onClose }) => {
   }));
   const totalUAH = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError(null);
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
+  const validateForm = () => {
+    const { firstName, lastName, phone, address } = form;
+    if (
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !phone.trim() ||
+      !address.trim()
+    ) {
+      setError("Будь ласка, заповніть усі поля");
+      return false;
+    }
+    return true;
+  };
+
+  const clearBasket = () => {
+    items.forEach((i) => product.removeFromBasket(i.id));
+  };
+
+  const handleCardPayment = async () => {
+    if (!validateForm()) return;
+
+    setProcessing(true);
+    setError(null);
     try {
-      // 1) Создаём заказ в БД, получаем orderId
-      const orderResp = await OrderService.createOrder(
+      const { clientSecret } = await PaymentService.createPaymentIntent(
+        items.map((i) => ({ productId: i.id, quantity: i.qty })),
+        totalUAH,
         {
           name: `${form.firstName} ${form.lastName}`.trim(),
           phone: form.phone,
           address: form.address,
-          paymentMethod: form.paymentMethod,
+        }
+      );
+      const cardElement = elements.getElement(CardElement);
+      const { error: stripeError, paymentIntent } =
+        await stripe.confirmCardPayment(clientSecret, {
+          payment_method: { card: cardElement },
+        });
+      if (stripeError) throw stripeError;
+      if (paymentIntent.status === "succeeded") {
+        await OrderService.createOrder(
+          {
+            name: `${form.firstName} ${form.lastName}`.trim(),
+            phone: form.phone,
+            address: form.address,
+            paymentMethod: "card",
+          },
+          items.map((i) => ({ productId: i.id, quantity: i.qty }))
+        );
+
+        clearBasket();
+        onSuccess();
+        onClose();
+      }
+    } catch (e) {
+      setError(e.response?.data?.error || e.message || "Payment failed");
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleCashOrder = async () => {
+    if (!validateForm()) return;
+
+    setProcessing(true);
+    setError(null);
+    try {
+      await OrderService.createOrder(
+        {
+          name: `${form.firstName} ${form.lastName}`.trim(),
+          phone: form.phone,
+          address: form.address,
+          paymentMethod: "cash",
         },
         items.map((i) => ({ productId: i.id, quantity: i.qty }))
       );
-      const orderId = orderResp.data.id;
-
-      if (form.paymentMethod === "card") {
-        // 2) В случае оплаты картой редиректим в Stripe
-        const checkoutUrl = await PaymentService.createStripeSession(
-          orderId,
-          totalUAH
-        );
-        window.location.href = checkoutUrl;
-      } else {
-        // 3) Иначе — подтверждаем заказ и закрываем окно
-        onClose();
-      }
-    } catch (err) {
-      console.error(err.response?.data || err.message);
-      alert(err.response?.data?.error || err.message);
+      clearBasket();
+      onSuccess();
+      onClose();
+    } catch (e) {
+      setError(e.response?.data?.error || e.message || "Order failed");
     } finally {
-      setSubmitting(false);
+      setProcessing(false);
     }
   };
 
@@ -87,55 +144,29 @@ const Checkout = observer(({ onClose }) => {
             <X className="w-5 h-5 text-gray-600" />
           </button>
         </div>
-
         <div className="flex flex-col md:flex-row">
-          {/* Форма с личными данными */}
           <div className="md:w-1/2 p-6 border-r">
             <h3 className="font-medium text-lg mb-4">Дані для доставки</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-gray-700 mb-1">Ім&apos;я</label>
-                <input
-                  name="firstName"
-                  value={form.firstName}
-                  onChange={handleChange}
-                  required
-                  className="w-full border rounded-lg px-3 py-2 focus:ring focus:border-green-300"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-1">Прізвище</label>
-                <input
-                  name="lastName"
-                  value={form.lastName}
-                  onChange={handleChange}
-                  className="w-full border rounded-lg px-3 py-2 focus:ring focus:border-green-300"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-1">Телефон</label>
-                <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  required
-                  className="w-full border rounded-lg px-3 py-2 focus:ring focus:border-green-300"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-1">Адреса</label>
-                <input
-                  name="address"
-                  value={form.address}
-                  onChange={handleChange}
-                  required
-                  className="w-full border rounded-lg px-3 py-2 focus:ring focus:border-green-300"
-                />
-              </div>
-
+            <form className="space-y-4">
+              {["firstName", "lastName", "phone", "address"].map((field) => (
+                <div key={field}>
+                  <label className="block text-gray-700 mb-1">
+                    {field === "firstName"
+                      ? "Ім'я"
+                      : field === "lastName"
+                      ? "Прізвище"
+                      : field === "phone"
+                      ? "Телефон"
+                      : "Адреса"}
+                  </label>
+                  <input
+                    name={field}
+                    value={form[field]}
+                    onChange={handleChange}
+                    className="w-full border rounded-lg px-3 py-2 focus:ring focus:border-green-300"
+                  />
+                </div>
+              ))}
               <div>
                 <span className="block text-gray-700 mb-1">Оплата</span>
                 <div className="flex items-center space-x-4">
@@ -164,23 +195,35 @@ const Checkout = observer(({ onClose }) => {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg"
-              >
-                {submitting
-                  ? form.paymentMethod === "card"
-                    ? "Переходимо до оплати…"
-                    : "Оформлюємо…"
-                  : form.paymentMethod === "card"
-                  ? `Оплатити ${totalUAH} грн`
-                  : "Підтвердити замовлення"}
-              </button>
+              {form.paymentMethod === "card" && (
+                <div className="border p-4 rounded">
+                  <CardElement options={{ hidePostalCode: true }} />
+                </div>
+              )}
+
+              {error && <p className="text-red-600">{error}</p>}
+
+              {form.paymentMethod === "card" ? (
+                <button
+                  type="button"
+                  onClick={handleCardPayment}
+                  disabled={processing || !stripe || !elements}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
+                >
+                  {processing ? "Обробка…" : `Оплатити ${totalUAH} грн`}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleCashOrder}
+                  disabled={processing}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg"
+                >
+                  {processing ? "Обробка…" : "Підтвердити замовлення"}
+                </button>
+              )}
             </form>
           </div>
-
-          {/* Список товаров и итог */}
           <div className="md:w-1/2 p-6">
             <h3 className="font-medium text-lg mb-4">Ваше замовлення</h3>
             <div className="space-y-4 max-h-[400px] overflow-y-auto">
